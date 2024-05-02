@@ -6,5 +6,6 @@ note over Bob,Agent:the following command checks whether any trusted pubKey matc
 Bob->Agent:checkVC(decryptedMail)
 Agent-->Bob:return VALID
 Bob->Bob:checkExpirationDate(VC)
-Bob->Bob:compareVCAndMail()
+note over Bob:Automatic as well as manuel comparing:
+Bob->Bob:compareVCAndMail(VC)
 

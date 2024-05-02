@@ -3,9 +3,11 @@ title Immatrikulation
 Alice->Uni:confirmImmatrikulation()
 note over Alice,Uni: Instead of using a DID which would need to be checked the VC confirms the mails authorities 
 note over Alice,Uni: The VC should hold an expiration date
+note over Alice,Uni: The VC confirms that Alices mail belongs to a student known by the university
 Alice<--Uni:return token, signedVC
 Alice->Alice:generateKeyPair()
 Alice->Alice:storePrivateKey()
-Alice->Uni:sendPubKey(pubKey, token)
-Uni->Uni:storePublicKey()
-Alice<--Uni:
+Alice->Uni:askForUnisPubKey()
+Alice<--Uni:return unisPubKey
+Alice->Agent:storeUnisPubKey(unisPubKey)
+Agent-->Alice:
