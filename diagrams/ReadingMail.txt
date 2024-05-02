@@ -5,7 +5,7 @@ note over Bob,Agent:the following command checks whether any trusted pubKey matc
 Agent->Agent:isPubKeyKnown(alicesEmailAdresse)
 Agent->Uni:getPubKey(alicesEmailAdresse)
 Uni-->Agent:return alicesPubKey
-Agent->Agent:decryptMail(bobsPubKey)
+Agent->Agent:decryptMail(bobsPrivateKey)
 Agent->Agent:checkSignature(decryptedMail, alicesPubKey)
 Agent-->Bob:return decryptedMail
 note over Bob,Agent: No VCs -> skip checkVC(...)
