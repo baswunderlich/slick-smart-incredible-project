@@ -9,8 +9,7 @@ note over Agent,Uni: The agent can ask all trusted instances if it knows the pub
 Agent->Uni:getPubKey(bobsEmailAdresse)
 Uni-->Agent:return bobsPubKey
 Agent->Agent:encryptMail(bobsPubKey)
-Agent-->Alice:return encryptedMail
-Alice->Agent:sendMailForSignature(encryptedMail)
+Agent->Agent:signMail(alicePrivateKey)
 Agent-->Alice:return signedMail
 Alice->MailServer:send(signedMail)
 MailServer->Bob:send(signedMail)

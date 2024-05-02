@@ -1,11 +1,18 @@
 title Evaluation of email
 
-Bob->Agent:decryptMailWithPrivateKey(mail)
-Agent-->Bob:return decryptedMail
+Bob->Agent:decryptMailWithPrivateKey(mail, aliceEmailAdresse)
 note over Bob,Agent:the following command checks whether any trusted pubKey matches the signature
-Bob->Agent:checkVC(decryptedMail)
-Agent-->Bob:return VALID
-Bob->Bob:checkExpirationDate(VC)
-note over Bob:Automatic as well as manuel comparing:
-Bob->Bob:compareVCAndMail(VC)
+Agent->Agent:isPubKeyKnown(alicesEmailAdresse)
+Agent->Uni:getPubKey(alicesEmailAdresse)
+Uni-->Agent:return alicesPubKey
+Agent->Agent:decryptMail(bobsPubKey)
+Agent->Agent:checkSignature(decryptedMail, alicesPubKey)
+Agent-->Bob:return decryptedMail
+note over Bob,Agent: No VCs -> skip checkVC(...)
+Bob->Agent:checkVCSignature(decryptedMail)
+Agent->Agent:checkSignature(VC, unisPubKey)
+Agent-->Bob:return VCsContent, expDate
+Bob->Bob:checkExpirationDate(expDate)
+note over Bob:Automatic as well as manual comparing:
+Bob->Bob:compareWithMail(VCsContent)
 
