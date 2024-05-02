@@ -1,0 +1,10 @@
+title Evaluation of email
+
+Bob->Agent:decryptMailWithPrivateKey(mail)
+Agent-->Bob:return decryptedMail
+note over Bob,Agent:the following command checks whether any trusted pubKey matches the signature
+Bob->Agent:checkVC(decryptedMail)
+Agent-->Bob:return VALID
+Bob->Bob:checkExpirationDate(VC)
+Bob->Bob:compareVCAndMail()
+

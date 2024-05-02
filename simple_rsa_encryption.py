@@ -14,3 +14,4 @@ if __name__ == '__main__':
 
   print(crypto)
   print(rsa.decrypt(crypto=crypto, priv_key=privkey))
+  print(rsa.sign(priv_key=privkey, message=message, hash_method='SHA-1'))

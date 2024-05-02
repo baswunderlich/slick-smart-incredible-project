@@ -1,0 +1,12 @@
+title Sending an email
+
+Alice->Alice:writeMail()
+Alice->Alice:attachVC(mail)
+Alice->Agent:sendMailForEncryption(mailWithVC, bobsPubKey)
+Agent-->Alice:return encryptedMail
+Alice->Agent:sendMailForSignature(encryptedMail)
+Agent-->Alice:return signedMail
+Alice->MailServer:send(signedMail)
+MailServer->Bob:send(signedMail)
+Bob-->MailServer:
+MailServer-->Alice:
