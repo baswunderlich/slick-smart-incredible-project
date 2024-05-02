@@ -9,5 +9,8 @@ Alice->Alice:generateKeyPair()
 Alice->Alice:storePrivateKey()
 Alice->Uni:askForUnisPubKey()
 Alice<--Uni:return unisPubKey
+Alice->Uni:sendPersonalPublicKey(alicePublicKey)
+Uni->Uni:storePubKey(alicePublicKey)
+Alice<--Uni:
 Alice->Agent:storeUnisPubKey(unisPubKey)
 Agent-->Alice:

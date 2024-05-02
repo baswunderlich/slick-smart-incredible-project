@@ -2,7 +2,12 @@ title Sending an email
 
 Alice->Alice:writeMail()
 Alice->Alice:attachVC(mail)
-Alice->Agent:sendMailForEncryption(mailWithVC, bobsPubKey)
+Alice->Agent:sendMailForEncryption(mailWithVC, bobsEmailAdresse)
+Agent->Agent:isPubKeyKnown(bobsEmailAdresse)
+note over Agent,Uni: The agent can ask all trusted instances if it knows the pubKey matching the emailAdresse
+Agent->Uni:getPubKey(bobsEmailAdresse)
+Uni-->Agent:return bobsPubKey
+Agent->Agent:encryptMail(bobsPubKey)
 Agent-->Alice:return encryptedMail
 Alice->Agent:sendMailForSignature(encryptedMail)
 Agent-->Alice:return signedMail
