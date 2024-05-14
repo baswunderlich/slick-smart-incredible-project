@@ -29,8 +29,9 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.listViewEmails = new System.Windows.Forms.ListView();
+            this.selectedMailContentBox = new System.Windows.Forms.RichTextBox();
+            this.emailsColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -41,42 +42,55 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.listView1);
+            this.splitContainer1.Panel1.Controls.Add(this.listViewEmails);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.richTextBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(800, 450);
-            this.splitContainer1.SplitterDistance = 266;
+            this.splitContainer1.Panel2.Controls.Add(this.selectedMailContentBox);
+            this.splitContainer1.Size = new System.Drawing.Size(1758, 959);
+            this.splitContainer1.SplitterDistance = 584;
+            this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 0;
             // 
-            // listView1
+            // listViewEmails
             // 
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 12);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(251, 426);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listViewEmails.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.emailsColumn});
+            this.listViewEmails.HideSelection = false;
+            this.listViewEmails.Location = new System.Drawing.Point(10, 10);
+            this.listViewEmails.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.listViewEmails.Name = "listViewEmails";
+            this.listViewEmails.Size = new System.Drawing.Size(573, 939);
+            this.listViewEmails.TabIndex = 0;
+            this.listViewEmails.UseCompatibleStateImageBehavior = false;
+            this.listViewEmails.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
-            // richTextBox1
+            // selectedMailContentBox
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(3, 12);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(515, 426);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.selectedMailContentBox.Location = new System.Drawing.Point(1, 10);
+            this.selectedMailContentBox.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.selectedMailContentBox.Name = "selectedMailContentBox";
+            this.selectedMailContentBox.Size = new System.Drawing.Size(1161, 939);
+            this.selectedMailContentBox.TabIndex = 0;
+            this.selectedMailContentBox.Text = "";
+            // 
+            // emailsColumn
+            // 
+            this.emailsColumn.Text = "Emails";
+            this.emailsColumn.Width = -2;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 29F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1758, 959);
             this.Controls.Add(this.splitContainer1);
+            this.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -90,8 +104,9 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.ListView listViewEmails;
+        private System.Windows.Forms.RichTextBox selectedMailContentBox;
+        private System.Windows.Forms.ColumnHeader emailsColumn;
     }
 }
 
