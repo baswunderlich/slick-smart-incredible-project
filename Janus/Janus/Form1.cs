@@ -20,7 +20,6 @@ namespace Janus
             listViewEmails.DrawColumnHeader += ListViewEmails_DrawColumnHeader;
             listViewEmails.DrawItem += ListViewEmails_DrawItem;
             listViewEmails.DrawSubItem += ListViewEmails_DrawSubItem;
-            // Verbinde Event-Handler
             listViewEmails.SelectedIndexChanged += listViewEmails_SelectedIndexChanged;
 
             // Lade E-Mail-Liste beim Start
@@ -29,20 +28,15 @@ namespace Janus
 
         private void InitializeListView()
         {
-            // Stelle sicher, dass die ListView leer ist
-            listViewEmails.Columns.Clear();
-
-            // Füge eine Spalte hinzu
-            ColumnHeader columnHeader = new ColumnHeader();
-            columnHeader.Text = "E-Mails";  // Text der Spalte
-            columnHeader.Width = -2;        // Automatische Breite
-            listViewEmails.Columns.Add(columnHeader);
-
-            // Optional: Stelle den View-Modus auf 'Details' ein
+            // Setup the column
             listViewEmails.View = View.Details;
+            listViewEmails.Columns.Add("E-Mails", -2);  // Breite automatisch anpassen
+            listViewEmails.FullRowSelect = true;
 
-            // Füge Beispieldaten hinzu (optional, für Testzwecke)
-            FillEmailList();
+            // Add imagelist for resizing rows
+            ImageList imgList = new ImageList();
+            imgList.ImageSize = new Size(1, 40);  // Breite ist irrelevant, Höhe setzt die Zeilenhöhe
+            listViewEmails.SmallImageList = imgList;
         }
 
         private void FillEmailList()
@@ -90,38 +84,27 @@ namespace Janus
 
         private void ListViewEmails_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
-            e.DrawDefault = false;  // Wichtig, um die Standardzeichnung zu deaktivieren
+            e.DrawDefault = false; // Wichtig, um die Standardzeichnung zu deaktivieren
         }
 
         private void ListViewEmails_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
-            if (e.ColumnIndex == 0)
-            {
-                // E-Mail-Daten holen
-                var email = (Email)e.Item.Tag; // Stelle sicher, dass du das Tag entsprechend setzt
+            Email email = (Email)e.Item.Tag;
 
-                // Erste Zeile: Absender und Datum
-                string firstLine = $"{email.Sender}";
-                string date = email.Date;
-                string secondLine = email.Subject;
+            // Textformatierungen
+            StringFormat sfLeft = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center };
+            StringFormat sfRight = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center };
 
-                // Textformatierung
-                StringFormat sfLeft = new StringFormat();
-                sfLeft.LineAlignment = StringAlignment.Near;
-                sfLeft.Alignment = StringAlignment.Near;
+            // Berechne die Rechtecke für Texte
+            int splitPoint = e.Bounds.Width / 2; // Teilt die Breite für Absender und Datum
+            Rectangle leftRect = new Rectangle(e.Bounds.Left, e.Bounds.Top, splitPoint, e.Bounds.Height / 2);
+            Rectangle rightRect = new Rectangle(e.Bounds.Left + splitPoint, e.Bounds.Top, splitPoint, e.Bounds.Height / 2);
+            Rectangle secondLineRect = new Rectangle(e.Bounds.Left, e.Bounds.Top + e.Bounds.Height / 2, e.Bounds.Width, e.Bounds.Height / 2);
 
-                StringFormat sfRight = new StringFormat();
-                sfRight.LineAlignment = StringAlignment.Near;
-                sfRight.Alignment = StringAlignment.Far;
-
-                // Zeichne erste Zeile: Absender und Datum
-                e.Graphics.DrawString(firstLine, e.Item.Font, Brushes.Black, e.Bounds, sfLeft);
-                e.Graphics.DrawString(date, e.Item.Font, Brushes.Black, e.Bounds, sfRight);
-
-                // Zeichne zweite Zeile: Betreff
-                Rectangle secondLineRect = new Rectangle(e.Bounds.Left, e.Bounds.Top + e.Item.Font.Height + 2, e.Bounds.Width, e.Item.Font.Height);
-                e.Graphics.DrawString(secondLine, e.Item.Font, Brushes.Black, secondLineRect, sfLeft);
-            }
+            // Zeichne den Text
+            e.Graphics.DrawString(email.Sender, e.Item.Font, Brushes.Black, leftRect, sfLeft);
+            e.Graphics.DrawString(email.Date, e.Item.Font, Brushes.Black, rightRect, sfRight);
+            e.Graphics.DrawString(email.Subject, e.Item.Font, Brushes.Black, secondLineRect, sfLeft);
         }
     }
 }
