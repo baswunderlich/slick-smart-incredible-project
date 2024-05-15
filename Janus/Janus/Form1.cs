@@ -1,4 +1,5 @@
 ﻿using Janus.Models;
+using Janus.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -41,16 +42,18 @@ namespace Janus
 
         private void FillEmailList()
         {
-            // Test mail data
-            var emails = new List<Email>
-            {
-                new Email { Subject = "Betreff 1", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 1" },
-                new Email { Subject = "Betreff 2", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 2" },
-                new Email { Subject = "Betreff 3", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 3" },
-                new Email { Subject = "Betreff 4", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 4" },
-                new Email { Subject = "Betreff 5", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 5" },
-                new Email { Subject = "Betreff 6", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 6" },
-            };
+            //// Test mail data
+            //var emails = new List<Email>
+            //{
+            //    new Email { Subject = "Betreff 1", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 1" },
+            //    new Email { Subject = "Betreff 2", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 2" },
+            //    new Email { Subject = "Betreff 3", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 3" },
+            //    new Email { Subject = "Betreff 4", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 4" },
+            //    new Email { Subject = "Betreff 5", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 5" },
+            //    new Email { Subject = "Betreff 6", Sender = "absender@example.com", Date = "01.01.2024", Content = "Inhalt der E-Mail 6" },
+            //};
+            EmailService emailService = new EmailService("imap.web.de", 993, true, "qwertz0014@web.de", "SSITe5tM@il");
+            var emails = emailService.FetchEmails();
 
             listViewEmails.Items.Clear();
             foreach (var email in emails)
