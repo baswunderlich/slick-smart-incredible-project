@@ -68,7 +68,6 @@
             this.listViewEmails.Size = new System.Drawing.Size(573, 939);
             this.listViewEmails.TabIndex = 0;
             this.listViewEmails.UseCompatibleStateImageBehavior = false;
-            this.listViewEmails.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
             // 
             // selectedMailContentBox
             // 
