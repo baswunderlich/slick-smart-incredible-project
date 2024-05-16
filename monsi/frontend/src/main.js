@@ -1,35 +1,21 @@
 import './style.css';
 import './app.css';
 
-import logo from './assets/images/logo_monsi.png';
-import {Greet} from '../wailsjs/go/main/App';
+import {AddDID} from '../wailsjs/go/main/App';
 
 document.querySelector('#app').innerHTML = `
-    <img id="logo" class="logo">
-      <div class="result" id="result">Please enter your name below 👇</div>
-      <div class="input-box" id="input">
-        <input class="input" id="name" type="text" autocomplete="off" />
-        <button class="btn" onclick="greet()">Greet</button>
-      </div>
-    </div>
+    <h1>Here your DIDs should be visible</h1>
+    <h1>Here others DIDs and publicKeys should be visible</h2>
+    <div id="result">---</div>
+    <button class="btn" onclick="addDID()">Add DID</button>
 `;
-document.getElementById('logo').src = logo;
 
-let nameElement = document.getElementById("name");
-nameElement.focus();
 let resultElement = document.getElementById("result");
 
-// Setup the greet function
-window.greet = function () {
-    // Get name
-    let name = nameElement.value;
-
-    // Check if the input is empty
-    if (name === "") return;
-
-    // Call App.Greet(name)
+// Setup the addDID function
+window.addDID = function () {
     try {
-        Greet(name)
+        AddDID()
             .then((result) => {
                 // Update result with data back from App.Greet()
                 resultElement.innerText = result;
