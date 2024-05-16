@@ -1,0 +1,1 @@
+This project contains the Mail application communicating with the agent
