@@ -1,7 +1,7 @@
 import './style.css';
 import './app.css';
 
-import logo from './assets/images/logo-universal.png';
+import logo from './assets/images/logo_monsi.png';
 import {Greet} from '../wailsjs/go/main/App';
 
 document.querySelector('#app').innerHTML = `
