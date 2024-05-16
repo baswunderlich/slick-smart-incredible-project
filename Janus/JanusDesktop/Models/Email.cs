@@ -1,4 +1,4 @@
-﻿namespace Janus.Models
+﻿namespace JanusDesktop.Models
 {
     public class Email
     {

@@ -1,12 +1,12 @@
-﻿using Janus.Models;
-using Janus.Services;
+﻿using JanusDesktop.Models;
+using JanusDesktop.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
-namespace Janus
+namespace JanusDesktop
 {
     public partial class Form1 : Form
     {

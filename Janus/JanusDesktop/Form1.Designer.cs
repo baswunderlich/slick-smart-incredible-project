@@ -1,4 +1,4 @@
-﻿namespace Janus
+﻿namespace JanusDesktop
 {
     partial class Form1
     {
