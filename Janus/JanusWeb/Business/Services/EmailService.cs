@@ -1,11 +1,11 @@
-﻿using Janus.Models;
+﻿using JanusWeb.Models;
 using MailKit;
 using MailKit.Net.Imap;
 using System.Collections.Generic;
 using System.Linq;
 
 
-namespace Janus.Services
+namespace JanusWeb.Services
 {
     public class EmailService
     {
