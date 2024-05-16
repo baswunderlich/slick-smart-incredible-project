@@ -109,5 +109,10 @@ namespace Janus
             e.Graphics.DrawString(email.Date, e.Item.Font, Brushes.Black, rightRect, sfRight);
             e.Graphics.DrawString(email.Subject, e.Item.Font, Brushes.Black, secondLineRect, sfLeft);
         }
+
+        private void selectedMailContentBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
