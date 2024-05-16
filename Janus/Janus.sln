@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JanusDesktop", "Janus\JanusDesktop.csproj", "{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JanusWeb", "JanusWeb\JanusWeb.csproj", "{94A3D046-C2F0-4171-B93E-1A21D10558A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JanusWeb", "JanusWeb\JanusWeb.csproj", "{94A3D046-C2F0-4171-B93E-1A21D10558A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JanusDesktop", "JanusDesktop\JanusDesktop.csproj", "{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94A3D046-C2F0-4171-B93E-1A21D10558A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{94A3D046-C2F0-4171-B93E-1A21D10558A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94A3D046-C2F0-4171-B93E-1A21D10558A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94A3D046-C2F0-4171-B93E-1A21D10558A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DBC9B2F-4318-4B00-A8A3-DC7C0A4570F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
