@@ -5,3 +5,7 @@
 export function AddDID() {
   return window['go']['main']['App']['AddDID']();
 }
+
+export function GetListOfDIDs() {
+  return window['go']['main']['App']['GetListOfDIDs']();
+}

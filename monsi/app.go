@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"monsi/wallet"
 )
 
 // App struct
@@ -18,6 +19,15 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+}
+
+func (a *App) GetListOfDIDs() string {
+	dids := wallet.GetDIDs()
+	res := ""
+	for _, d := range dids {
+		res += (d + "<br></br>")
+	}
+	return res
 }
 
 // Greet returns a greeting for the given name
