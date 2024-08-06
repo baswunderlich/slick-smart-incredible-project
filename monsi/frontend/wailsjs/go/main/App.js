@@ -9,3 +9,11 @@ export function AddDID() {
 export function GetListOfDIDs() {
   return window['go']['main']['App']['GetListOfDIDs']();
 }
+
+export function GetListOfVCs(arg1) {
+  return window['go']['main']['App']['GetListOfVCs'](arg1);
+}
+
+export function GetVCsOfDIDs(arg1) {
+  return window['go']['main']['App']['GetVCsOfDIDs'](arg1);
+}

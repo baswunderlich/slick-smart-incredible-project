@@ -1,0 +1,9 @@
+//Add student VC
+{
+    "vc_id": "asdaskon1xo0",
+    "vc_title": "studentVC",
+    "vc_description": "VC proofs you are a student",
+    "vc": {
+        "title": "student"
+    }
+}

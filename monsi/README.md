@@ -2,10 +2,7 @@
 
 ## About
 
-This is the official Wails Vanilla template.
-
-You can configure the project by editing `wails.json`. More information about the project settings can be found
-here: https://wails.io/docs/reference/project-config
+This is the official Wails Svelte template.
 
 ## Live Development
 

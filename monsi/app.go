@@ -21,16 +21,20 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) GetListOfDIDs() string {
-	dids := wallet.GetDIDs()
-	res := ""
-	for _, d := range dids {
-		res += (d + "<br></br>")
-	}
-	return res
+func (a *App) GetListOfDIDs() []string {
+	return wallet.GetDIDs()
+}
+
+func (a *App) GetListOfVCs(did string) []string {
+	return wallet.GetVCs(did)
 }
 
 // Greet returns a greeting for the given name
 func (a *App) AddDID() string {
 	return "Hello! When everything is set up you should now be able to add a DID"
+}
+
+// Greet returns a greeting for the given name
+func (a *App) GetVCsOfDIDs(did string) string {
+	return "The VCs of a DID"
 }
