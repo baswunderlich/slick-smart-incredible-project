@@ -2,7 +2,6 @@
     import { GetListOfDIDs } from "../wailsjs/go/main/App.js";
     import { GetListOfVCs } from "../wailsjs/go/main/App.js";
     import { AddDID } from "../wailsjs/go/main/App.js";
-    import { GetVCsOfDIDs } from "../wailsjs/go/main/App.js";
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { getContext } from 'svelte';
@@ -44,10 +43,13 @@
         }
     };
 
-    let getListOfVCs = function(did) {
+    let getListOfVCs = function(i) {
+        let index = i.i;
+        console.log(index);
+        let did = DIDs[index];
         console.log("get list of VCs of DID " + did);
         try{
-            GetVCsOfDIDs(did)
+            GetListOfVCs(did)
                 .then((result) => {
                     VCs = result;
                 })
@@ -70,17 +72,20 @@
     <h3>Monsi</h3>
     <div class="row">
         <div class="column">
-        <div id="DIDlist"></div>
-            {#each DIDs as did}
-                <button on:click={getListOfVCs({did})}>{did} <br/></button>
-            {/each}
-        <div id="result">---</div>
-        <button class="btn" on:click="{addDID}">Add DID</button>
-        DID: <input id="DIDField"/>    
+            <div id="DIDlist"></div>
+                {#each DIDs as did, i}
+                    <button on:click={() => getListOfVCs({i})}>{did} <br/></button>
+                {/each}
+            <div id="result">---</div>
+            <button class="btn" on:click="{addDID}">Add DID</button>
+            DID: <input id="DIDField"/>     
+        </div>
+        <div class="column">  
+            {#each VCs as vc}
+                {vc} <br/>
+            {/each} 
+        </div> 
     </div>
-    <div class="column"></div>
-
-    </div> 
 </main>
 
 <style>

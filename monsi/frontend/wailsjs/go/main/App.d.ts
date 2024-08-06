@@ -6,5 +6,3 @@ export function AddDID():Promise<string>;
 export function GetListOfDIDs():Promise<Array<string>>;
 
 export function GetListOfVCs(arg1:string):Promise<Array<string>>;
-
-export function GetVCsOfDIDs(arg1:string):Promise<string>;

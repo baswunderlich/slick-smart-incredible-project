@@ -13,7 +13,3 @@ export function GetListOfDIDs() {
 export function GetListOfVCs(arg1) {
   return window['go']['main']['App']['GetListOfVCs'](arg1);
 }
-
-export function GetVCsOfDIDs(arg1) {
-  return window['go']['main']['App']['GetVCsOfDIDs'](arg1);
-}
