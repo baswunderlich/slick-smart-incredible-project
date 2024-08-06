@@ -2,7 +2,10 @@ package main
 
 import (
 	"embed"
+	"fmt"
+	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
@@ -12,6 +15,13 @@ import (
 var assets embed.FS
 
 func main() {
+
+	go startRouter()
+	startWails()
+}
+
+func startWails() {
+	fmt.Println("Wails started ...")
 	// Create an instance of the app structure
 	app := NewApp()
 
@@ -33,4 +43,17 @@ func main() {
 	if err != nil {
 		println("Error:", err.Error())
 	}
+}
+
+func startRouter() {
+	fmt.Println("Router started ...")
+	router := gin.Default()
+	router.GET("/helloWorld", helloWorld)
+
+	router.Run("localhost:8080")
+}
+
+// getAlbums responds with the list of all albums as JSON.
+func helloWorld(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, "Hello World! :D")
 }
