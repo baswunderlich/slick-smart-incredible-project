@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"monsi/api/model"
 	"monsi/vcmanager"
+	"monsi/wallet"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -30,4 +31,8 @@ func ListVCs(c *gin.Context) {
 			return
 		}
 	}
+}
+
+func ListDIDs(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, wallet.GetDIDs())
 }

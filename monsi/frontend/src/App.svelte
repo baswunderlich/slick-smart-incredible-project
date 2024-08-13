@@ -11,7 +11,6 @@
     let selectedDID = "";       //context: "selectedDID"
 
     let getListOfDIDs = function() {
-        let newDIDs = [];
         console.log("get list of DIDS");
         try{
             GetListOfDIDs()
@@ -49,7 +48,7 @@
         let did = DIDs[index];
         console.log("get list of VCs of DID " + did);
         try{
-            GetListOfVCs(did)
+            GetListOfVCs(did.did)
                 .then((result) => {
                     VCs = result;
                 })
@@ -72,13 +71,13 @@
     <h3>Monsi</h3>
     <div class="row">
         <div class="column">
+            <button class="btn" on:click="{addDID}">Add DID</button>
+            DID: <input id="DIDField"/>     <br/><br/>
             <div id="DIDlist"></div>
                 {#each DIDs as did, i}
-                    <button on:click={() => getListOfVCs({i})}>{did} <br/></button>
+                    <button on:click={() => getListOfVCs({i})}>{did.did} </button><br/>
                 {/each}
             <div id="result">---</div>
-            <button class="btn" on:click="{addDID}">Add DID</button>
-            DID: <input id="DIDField"/>     
         </div>
         <div class="column">  
             {#each VCs as vc}

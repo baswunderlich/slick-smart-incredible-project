@@ -22,7 +22,7 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) GetListOfDIDs() []string {
+func (a *App) GetListOfDIDs() []wallet.DID {
 	return wallet.GetDIDs()
 }
 
