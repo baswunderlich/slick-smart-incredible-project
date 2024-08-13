@@ -27,7 +27,7 @@ func (a *App) GetListOfDIDs() []string {
 }
 
 func (a *App) GetListOfVCs(did string) []string {
-	return vcmanager.GetVCs(did)
+	return vcmanager.GetVCsAsStrings(did)
 }
 
 // Greet returns a greeting for the given name

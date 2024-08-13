@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func GetVCs(did string) []string {
+func GetVCsAsStrings(did string) []string {
 	vcs := readVCsFromFiles(did)
 	str_results := []string{}
 	for _, v := range vcs {
@@ -15,6 +15,10 @@ func GetVCs(did string) []string {
 		str_results = append(str_results, fmt.Sprintf("%s | %s", v.VC_title, v.VC_id))
 	}
 	return str_results
+}
+
+func GetVCs(did string) []VC {
+	return readVCsFromFiles(did)
 }
 
 func GetVC(vc_id string) []string {
