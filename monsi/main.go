@@ -49,7 +49,7 @@ func startRouter() {
 	fmt.Println("Router started ...")
 	router := gin.Default()
 	router.POST("api/vc", api.ListVCs)
-	router.POST("api/did", api.ListDIDs)
+	router.GET("api/did", api.ListDIDs)
 
 	router.Run("localhost:8080")
 }
