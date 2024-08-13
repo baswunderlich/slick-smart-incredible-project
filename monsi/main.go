@@ -3,7 +3,7 @@ package main
 import (
 	"embed"
 	"fmt"
-	"net/http"
+	"monsi/api"
 
 	"github.com/gin-gonic/gin"
 	"github.com/wailsapp/wails/v2"
@@ -48,12 +48,7 @@ func startWails() {
 func startRouter() {
 	fmt.Println("Router started ...")
 	router := gin.Default()
-	router.GET("/helloWorld", helloWorld)
+	router.POST("/vc", api.ListVCs)
 
 	router.Run("localhost:8080")
-}
-
-// getAlbums responds with the list of all albums as JSON.
-func helloWorld(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, "Hello World! :D")
 }

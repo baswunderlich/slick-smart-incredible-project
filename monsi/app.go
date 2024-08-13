@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"monsi/vcmanager"
 	"monsi/wallet"
 )
 
@@ -26,7 +27,7 @@ func (a *App) GetListOfDIDs() []string {
 }
 
 func (a *App) GetListOfVCs(did string) []string {
-	return wallet.GetVCs(did)
+	return vcmanager.GetVCs(did)
 }
 
 // Greet returns a greeting for the given name
