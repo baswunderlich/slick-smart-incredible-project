@@ -1,6 +1,6 @@
 package model
 
 type EncryptDTO struct {
-	content string
-	did     string
+	Content string `json:"content"`
+	Did     string `json:"did"`
 }

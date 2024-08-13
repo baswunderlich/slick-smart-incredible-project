@@ -1,6 +1,6 @@
 package model
 
 type VCDTO struct {
-	Did  string
-	VCid string
+	Did  string `json:"did"`
+	VCid string `json:"vcid"`
 }

@@ -48,7 +48,7 @@ func startWails() {
 func startRouter() {
 	fmt.Println("Router started ...")
 	router := gin.Default()
-	router.POST("/vc", api.ListVCs)
+	router.POST("api/vc", api.ListVCs)
 
 	router.Run("localhost:8080")
 }
