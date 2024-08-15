@@ -1,28 +1,22 @@
 ﻿@model JanusWeb.Models.MailList
 @using System.Text.Encodings.Web
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Viewer</title>
     <style>
         #emailContent {
             height: 100vh;
             overflow-y: auto;
         }
 
+        /* Makes the Area for email display always look big */
         #contentArea {
             width: 100%;
-            height: calc(100vh - 20px);
+            height: 100%;
         }
     </style>
-</head>
-<body>
+
     <div class="container-fluid h-100">
         <div class="row h-100">
-            <div class="col-4 p-3 border-right">
+            <div class="col-2">
                 <div class="list-group" id="emailList">
                     @foreach (var email in Model.EmailList)
                     {
@@ -33,7 +27,7 @@
                     }
                 </div>
             </div>
-            <div class="col-8 p-3">
+            <div class="col-10">
                 <textarea id="contentArea" class="form-control" readonly></textarea>
             </div>
         </div>
@@ -44,5 +38,3 @@
             document.getElementById('contentArea').value = content;
         }
     </script>
-</body>
-</html>
