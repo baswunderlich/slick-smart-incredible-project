@@ -1,40 +1,43 @@
 ﻿@model JanusWeb.Models.MailList
 @using System.Text.Encodings.Web
 
-    <style>
-        #emailContent {
-            height: 100vh;
-            overflow-y: auto;
-        }
+<style>
+    .row-full-height {
+        height: 100%;
+    }
 
-        /* Makes the Area for email display always look big */
-        #contentArea {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    #emailList {
+        height: 100%;
+        overflow-y: auto;
+    }
 
-    <div class="container-fluid h-100">
-        <div class="row h-100">
-            <div class="col-2">
-                <div class="list-group" id="emailList">
-                    @foreach (var email in Model.EmailList)
-                    {
-                        <a href="#" class="list-group-item list-group-item-action"
-                       onclick="showContent('@(JavaScriptEncoder.Default.Encode(email.Content))')">
-                            @email.Subject
-                        </a>
-                    }
-                </div>
-            </div>
-            <div class="col-10">
-                <textarea id="contentArea" class="form-control" readonly></textarea>
-            </div>
+    #contentArea {
+        width: 100%;
+        height: 100%;
+        resize: none;
+        overflow-y: auto;
+    }
+</style>
+
+<div class="row row-full-height">
+    <div class="col-2 d-flex flex-column p-0">
+        <div class="list-group" id="emailList">
+            @foreach (var email in Model.EmailList)
+            {
+                <a href="#" class="list-group-item list-group-item-action"
+                   onclick="showContent('@(JavaScriptEncoder.Default.Encode(email.Content))')">
+                    @email.Subject
+                </a>
+            }
         </div>
     </div>
+    <div class="col-10 d-flex flex-column p-0">
+        <textarea id="contentArea" class="form-control" readonly></textarea>
+    </div>
+</div>
 
-    <script>
-        function showContent(content) {
-            document.getElementById('contentArea').value = content;
-        }
-    </script>
+<script>
+    function showContent(content) {
+        document.getElementById('contentArea').value = content;
+    }
+</script>
