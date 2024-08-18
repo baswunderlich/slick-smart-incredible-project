@@ -51,5 +51,5 @@ func startRouter() {
 	router.POST("api/vc", api.ListVCs)
 	router.GET("api/did", api.ListDIDs)
 
-	router.Run("localhost:8080")
+	router.Run("localhost:80")
 }
