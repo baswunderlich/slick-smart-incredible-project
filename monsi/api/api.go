@@ -34,5 +34,12 @@ func ListVCs(c *gin.Context) {
 }
 
 func ListDIDs(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, wallet.GetDIDs())
+	dids_raw := wallet.GetDIDs()
+	dids := []model.DIDDTO{}
+
+	for _, d := range dids_raw {
+		dids = append(dids, model.DIDDTO{DID: d.DID, PubKey: d.PubKey})
+	}
+
+	c.IndentedJSON(http.StatusOK, dids)
 }
