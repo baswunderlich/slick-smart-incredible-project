@@ -15,7 +15,6 @@ import (
 var assets embed.FS
 
 func main() {
-
 	go startRouter()
 	startWails()
 }
@@ -51,5 +50,5 @@ func startRouter() {
 	router.POST("api/vc", api.ListVCs)
 	router.GET("api/did", api.ListDIDs)
 
-	router.Run("localhost:80")
+	router.Run("0.0.0.0:80")
 }
