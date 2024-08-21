@@ -26,6 +26,7 @@ x64/
 x86/
 bld/
 [Bb]in/
+!monsi/build/bin/
 [Oo]bj/
 [Ll]og/
 
