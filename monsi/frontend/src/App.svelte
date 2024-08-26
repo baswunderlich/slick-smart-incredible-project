@@ -1,7 +1,6 @@
 <script>
     import { GetListOfDIDs } from "../wailsjs/go/main/App.js";
     import { GetListOfVCs } from "../wailsjs/go/main/App.js";
-    import { AddDID } from "../wailsjs/go/main/App.js";
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { getContext } from 'svelte';
@@ -24,23 +23,6 @@
             console.error(err);
         }
     }
-
-    // Setup the addDID function
-    let addDID = function () {
-        let resultElement = document.getElementById("result");
-        try {
-            AddDID()
-                .then((result) => {
-                    // Update result with data back from App.Greet()
-                    resultElement.innerText = result;
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        } catch (err) {
-            console.error(err);
-        }
-    };
 
     let getListOfVCs = function(i) {
         let index = i.i;
@@ -71,8 +53,6 @@
     <h3>Monsi</h3>
     <div class="row">
         <div class="column">
-            <button class="btn" on:click="{addDID}">Add DID</button>
-            DID: <input id="DIDField"/>     <br/><br/>
             <div id="DIDlist"></div>
                 {#each DIDs as did, i}
                     <button on:click={() => getListOfVCs({i})}>{did.did} </button><br/>

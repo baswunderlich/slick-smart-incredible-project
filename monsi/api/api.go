@@ -19,14 +19,14 @@ func ListVCs(c *gin.Context) {
 		// DO SOMETHING WITH THE ERROR
 		fmt.Printf("Problems when binding")
 	}
-	vcs := vcmanager.GetVCs(requestBody.Did)
+	vcs := vcmanager.GetVCsOfDID(requestBody.Did)
 	if requestBody.VCid == "" {
 		c.IndentedJSON(http.StatusOK, vcs)
 		return
 	}
 
 	for _, v := range vcs {
-		if v.VC_id == requestBody.VCid {
+		if v.ID == requestBody.VCid {
 			c.IndentedJSON(http.StatusOK, v)
 			return
 		}
@@ -42,4 +42,24 @@ func ListDIDs(c *gin.Context) {
 	}
 
 	c.IndentedJSON(http.StatusOK, dids)
+}
+
+func Decrypt(c *gin.Context) {
+	var requestBody model.DecryptDTO
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		// DO SOMETHING WITH THE ERROR
+		fmt.Printf("Problems when binding")
+		c.IndentedJSON(400, err)
+	}
+}
+
+func Encrypt(c *gin.Context) {
+	var requestBody model.DecryptDTO
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		// DO SOMETHING WITH THE ERROR
+		fmt.Printf("Problems when binding")
+		c.IndentedJSON(400, err)
+	}
 }

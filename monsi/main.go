@@ -4,6 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"monsi/api"
+	"monsi/vcmanager"
 
 	"github.com/gin-gonic/gin"
 	"github.com/wailsapp/wails/v2"
@@ -15,6 +16,7 @@ import (
 var assets embed.FS
 
 func main() {
+	vcmanager.ReadVCsFromFiles()
 	go startRouter()
 	startWails()
 }
@@ -49,6 +51,8 @@ func startRouter() {
 	router := gin.Default()
 	router.POST("api/vc", api.ListVCs)
 	router.GET("api/did", api.ListDIDs)
+	router.POST("api/encrypt", api.Encrypt)
+	router.POST("api/ddecrypt", api.Decrypt)
 
 	router.Run("0.0.0.0:80")
 }

@@ -1,0 +1,17 @@
+[
+    {
+        "did": "did:example:1",
+        "pubKey": "pubKey",
+        "privKey": "privKey"
+    },
+    {
+        "did": "did:example:2",
+        "pubKey": "pubKey",
+        "privKey": "privKey"
+    },
+    {
+        "did": "did:example:university",
+        "pubKey": "pubKey",
+        "privKey": "privKey"
+    }
+]

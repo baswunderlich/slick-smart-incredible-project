@@ -4,48 +4,59 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 )
 
+var global_vcs []VC
+
 func GetVCsAsStrings(did string) []string {
-	vcs := readVCsFromFiles(did)
+	vcs := GetVCsOfDID(did)
 	str_results := []string{}
 	for _, v := range vcs {
 		fmt.Println(v)
-		str_results = append(str_results, fmt.Sprintf("%s | %s", v.VC_title, v.VC_id))
+		str_results = append(str_results, fmt.Sprintf("%s | %s", v.Type, v.ID))
 	}
 	return str_results
 }
 
-func GetVCs(did string) []VC {
-	return readVCsFromFiles(did)
+func GetAllVCs() []VC {
+	return global_vcs
 }
 
 func GetVC(vc_id string) []string {
 	return []string{"to be implemented"}
 }
 
-func readVCsFromFiles(did string) []VC {
-	vcs := []VC{}
-	dir := "./vcs"
-	did = strings.ReplaceAll(did, "did", "")
-	dir += strings.ReplaceAll(did, ":", "/")
-	files, err := os.ReadDir(dir)
+func GetVCsOfDID(did string) []VC {
+	var res []VC
+	for _, vc := range global_vcs {
+		if vc.Subject.ID == did {
+			res = append(res, vc)
+		}
+	}
+	return res
+}
+
+func ReadVCsFromFiles() []VC {
+	var vcs []VC
+	files, err := os.ReadDir("vcs")
 	if err != nil {
-		fmt.Printf("The specified directory could not be found: %s", dir)
+		fmt.Println("The specified directory could not be found: did")
 	}
 
 	for _, f := range files {
-		content, err := os.ReadFile(fmt.Sprintf("%s/%s", dir, f.Name()))
-		if err != nil {
-			fmt.Printf("Could not open a file")
+		var decoded_vc VC
+		file_content, err1 := os.ReadFile(fmt.Sprintf("./vcs/%s", f.Name()))
+		if err1 != nil {
+			fmt.Println(err)
 		}
-		var payload VC
-		err = json.Unmarshal(content, &payload)
-		if err != nil {
-			fmt.Printf("Error during unmarshal")
+		err2 := json.Unmarshal(file_content, decoded_vc)
+		if err2 != nil {
+			fmt.Println(err)
 		}
-		vcs = append(vcs, payload)
+		var vcs []VC
+		vcs = append(vcs, decoded_vc)
 	}
-	return vcs
+
+	global_vcs = vcs
+	return global_vcs
 }

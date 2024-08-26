@@ -18,7 +18,7 @@ func GetDIDsAsString() []string {
 
 func GetDIDs() []DID {
 	dids := []DID{}
-	content, err := os.ReadFile("wallet/dids.json")
+	content, err := os.ReadFile("./dids.json")
 	if err != nil {
 		fmt.Printf("Could not open a file")
 	}

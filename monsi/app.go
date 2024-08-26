@@ -29,8 +29,3 @@ func (a *App) GetListOfDIDs() []wallet.DID {
 func (a *App) GetListOfVCs(did string) []string {
 	return vcmanager.GetVCsAsStrings(did)
 }
-
-// Greet returns a greeting for the given name
-func (a *App) AddDID() string {
-	return "Hello! When everything is set up you should now be able to add a DID"
-}
