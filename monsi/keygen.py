@@ -1,5 +1,4 @@
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
+import rsa
  
 class KeyPair:
     pubKey: str
@@ -10,26 +9,13 @@ class KeyPair:
         self.privKey = privKey 
 
 def gen_keys() -> KeyPair:
-    keyPair = RSA.generate(3072)
-    
-    pubKey = keyPair.publickey()
-    # print(f"Public key:  (n={hex(pubKey.n)}, e={hex(pubKey.e)})")
-    pubKeyPEM = pubKey.exportKey()
-    # print(pubKeyPEM.decode('ascii'))
-    
-    # print(f"Private key: (n={hex(pubKey.n)}, d={hex(keyPair.d)})")
-    privKeyPEM = keyPair.exportKey()
-    # print(privKeyPEM.decode('ascii'))
-    return KeyPair(pubKey=pubKeyPEM, privKey=privKeyPEM)
+    (bob_pub, bob_priv) = rsa.newkeys(512)
+    return KeyPair(pubKey=bob_pub.save_pkcs1(), privKey=bob_priv.save_pkcs1())
  
 def encrypt(pubKey: str, message: str) -> str:
     #encryption
-    encryptor = PKCS1_OAEP.new(pubKey)
-    encrypted = encryptor.encrypt(bytes(message, encoding="utf-8"))
-    encrypted
+    return str(rsa.encrypt(message=bytes(message, encoding="utf-8"), pub_key=rsa.PublicKey.load_pkcs1(pubKey)))
 
 def decrypt(privKey: str, message: str) -> str:
-    #decryption
-    decryptor = PKCS1_OAEP.new(privKey)
-    decrypted = decryptor.decrypt(bytes(message, encoding="utf-8"))
-    return decrypted
+    #decryption   
+    return str(rsa.decrypt(message=bytes(message, encoding="utf-8"), priv_key=rsa.PublicKey.load_pkcs1(privKey)))
