@@ -13,7 +13,7 @@ func GetVCsAsStrings(did string) []string {
 	str_results := []string{}
 	for _, v := range vcs {
 		fmt.Println(v)
-		str_results = append(str_results, fmt.Sprintf("%s | %s", v.Type, v.ID))
+		str_results = append(str_results, "v.Type[len(v.Type)-1]")
 	}
 	return str_results
 }
@@ -27,6 +27,7 @@ func GetVC(vc_id string) []string {
 }
 
 func GetVCsOfDID(did string) []VC {
+	fmt.Println(global_vcs)
 	var res []VC
 	for _, vc := range global_vcs {
 		if vc.Subject.ID == did {
@@ -49,11 +50,10 @@ func ReadVCsFromFiles() []VC {
 		if err1 != nil {
 			fmt.Println(err)
 		}
-		err2 := json.Unmarshal(file_content, decoded_vc)
+		err2 := json.Unmarshal(file_content, &decoded_vc)
 		if err2 != nil {
 			fmt.Println(err)
 		}
-		var vcs []VC
 		vcs = append(vcs, decoded_vc)
 	}
 
