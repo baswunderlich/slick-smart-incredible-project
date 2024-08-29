@@ -1,17 +1,17 @@
 [
     {
         "did": "did:example:1",
-        "pubKey": "pubKey",
-        "privKey": "privKey"
+        "pubKey": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQC0BRs6f4tf+y52hTzaRPR0emPiu+tN1hSxaIRnkOiFzp88+5i4rxFIOd0T\ngvAbmPK3o9WsGroWBtJ6aUofwJ6lAgMBAAE=\n-----END RSA PUBLIC KEY-----\n",
+        "privKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIBPQIBAAJBALQFGzp/i1/7LnaFPNpE9HR6Y+K7603WFLFohGeQ6IXOnzz7mLiv\nEUg53ROC8BuY8rej1awauhYG0nppSh/AnqUCAwEAAQJBAKGprEgeXiW1xoX9JSbG\nodkwSB9HrwpZZH/lYnI3OUozeLuvcYqQwrzH7Tn46wKw+upmjOkvVIXAXdPvQQDc\nTwECIwDDEM2+6rz0ym2p/mPXQnGnmeUwTqab181uSx+h1MrGW6qhAh8A7EEdQMUR\n1AuWXo4dKHJd/r1ukBlSiQIs5kk4b1mFAiMAwBwshXpp3iv/FQyVB8tIY+gM8CaF\nr7Y5fAZAgQExM2nUAQIeP7z9eGjye2O46L+sjCn2w/A1cPjz9HS6ylI8wIXFAiJt\nrf9UARLTUeu7uHufHZ9UzGrkvTYybkK5BQ+s+U9dikMh\n-----END RSA PRIVATE KEY-----\n"
     },
     {
         "did": "did:example:2",
-        "pubKey": "pubKey",
-        "privKey": "privKey"
+        "pubKey": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQCAzlsRTLkD+LGgs5s5y+m8rn0MWJrUXHtiVVI78RFVv+r6by3Udg9ahkUE\nqjrIac4sJZxWa/oA6/89KS37oU/zAgMBAAE=\n-----END RSA PUBLIC KEY-----\n",
+        "privKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIBPQIBAAJBAIDOWxFMuQP4saCzmznL6byufQxYmtRce2JVUjvxEVW/6vpvLdR2\nD1qGRQSqOshpziwlnFZr+gDr/z0pLfuhT/MCAwEAAQJAFxVkSrBmQ+jw5Gzrt6rs\no6zdqjXC4aYFUrUZvLZSEwrX6HBjJTESF+04zcPF8+W08h1RIf0lojeWnd/SgqXw\n8QIjAML+3gW7zAp0qb6PaSELT7jFa3IQcvbi1gWow6v5DQ+WeJkCHwCpGmSU4z6P\nM1vcCrHssCboKxEP6qYTuExpExItKGsCIwCKcjCq+3pUVh6K6QGob4KL2sd9tgYa\nGlYAsKE1Ad/vGFPJAh5wPeB9IsinbEOQrlii7dklSVCt6+YIONAe/lWWO7kCIwCQ\n7tcAphsEGJs1F1LUnd+RlQ8G/YFbXHi78TFfRq67GrPk\n-----END RSA PRIVATE KEY-----\n"
     },
     {
         "did": "did:example:university",
-        "pubKey": "pubKey",
-        "privKey": "privKey"
+        "pubKey": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQCadzYY1Xbbx323sv2e5RW48hcJcXthJuqGJz+ezay3gXImDN2wV0NisRmD\nZVlQ3PH2P+vmzbvh9g+QDz9RS51zAgMBAAE=\n-----END RSA PUBLIC KEY-----\n",
+        "privKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIBPQIBAAJBAJp3NhjVdtvHfbey/Z7lFbjyFwlxe2Em6oYnP57NrLeBciYM3bBX\nQ2KxGYNlWVDc8fY/6+bNu+H2D5APP1FLnXMCAwEAAQJAKXyPOQhMTic8atRWLhEV\nToEnEtA59RQAtVthSQOwdvAvd58DDqyMKXTK4bKy3n2NEIqKCBafbq+yjF1QS7OL\nMQIjAPl3hWevh9KeEVn/vkCGyfml0RGaoIDzziXoKvWCtltNNaUCHwCegsgs3Vwh\nmcNp4Zy6hg75Uf3ahHKQA1G+pLIbCzcCIwCDGocnqJ4O2DdyPu8zZiL7amNnhwXW\n/0pVrZ/2Cs3fScJpAh4juw1Od7ON63BOTMocjZ2Qe/gCKvr8FZN2qv9u8y8CIwCQ\nAi2CBlMxWZ4leIf/q6et6tDIBD1OB2yHsTkyb4zqn6KT\n-----END RSA PRIVATE KEY-----\n"
     }
 ]
