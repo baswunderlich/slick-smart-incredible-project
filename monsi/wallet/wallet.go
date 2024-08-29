@@ -1,7 +1,13 @@
 package wallet
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
+	"encoding/pem"
+	"errors"
 	"fmt"
 	"os"
 )
@@ -27,4 +33,49 @@ func GetDIDs() []DID {
 		fmt.Printf("Error during unmarshal")
 	}
 	return dids
+}
+
+func getDID(did string) (DID, error) {
+	dids := GetDIDs()
+	for _, d := range dids {
+		if d.DID == did {
+			return d, nil
+		}
+	}
+	return DID{}, errors.New("did could not be found")
+}
+
+func Decrypt(message string, did string) ([]byte, error) {
+	privKey, err := getPrivKeyOfDID(did)
+	if err != nil {
+		return []byte("0"), err
+	}
+	b64_msg, err := base64.StdEncoding.DecodeString(message)
+	plain_msg_b64, err := privKey.Decrypt(rand.Reader, b64_msg, nil)
+	if err != nil {
+		return []byte("0"), err
+	}
+	plain_msg, _ := base64.StdEncoding.DecodeString(string(plain_msg_b64))
+	return plain_msg, nil
+}
+
+func Encrypt(message string, did string) {
+
+}
+
+func getPubKeyOfDID(did string) *rsa.PublicKey {
+	return nil
+}
+
+func getPrivKeyOfDID(did string) (*rsa.PrivateKey, error) {
+	did_obj, err := getDID(did)
+	if err != nil {
+		return nil, err
+	}
+	block, _ := pem.Decode([]byte(did_obj.PrivKey))
+	key, err := x509.ParsePKCS8PrivateKey([]byte(block.Bytes))
+	if err != nil {
+		return nil, err
+	}
+	return key.(*rsa.PrivateKey), nil
 }

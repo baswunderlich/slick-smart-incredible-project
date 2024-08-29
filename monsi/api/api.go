@@ -38,7 +38,7 @@ func ListDIDs(c *gin.Context) {
 	dids := []model.DIDDTO{}
 
 	for _, d := range dids_raw {
-		dids = append(dids, model.DIDDTO{DID: d.DID, PubKey: d.PubKey})
+		dids = append(dids, model.DIDDTO{DID: d.DID, PubKey: string(d.PubKey)})
 	}
 
 	c.IndentedJSON(http.StatusOK, dids)
@@ -50,8 +50,15 @@ func Decrypt(c *gin.Context) {
 	if err := c.BindJSON(&requestBody); err != nil {
 		// DO SOMETHING WITH THE ERROR
 		fmt.Printf("Problems when binding")
-		c.IndentedJSON(400, err)
+		c.IndentedJSON(400, err.Error())
 	}
+
+	res, err := wallet.Decrypt(requestBody.Content, requestBody.Did)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
+	}
+	c.IndentedJSON(http.StatusOK, res)
+
 }
 
 func Encrypt(c *gin.Context) {

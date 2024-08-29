@@ -52,7 +52,7 @@ func startRouter() {
 	router.POST("api/vc", api.ListVCs)
 	router.GET("api/did", api.ListDIDs)
 	router.POST("api/encrypt", api.Encrypt)
-	router.POST("api/ddecrypt", api.Decrypt)
+	router.POST("api/decrypt", api.Decrypt)
 
 	router.Run("0.0.0.0:80")
 }
