@@ -51,20 +51,41 @@ func Decrypt(message string, did string) ([]byte, error) {
 		return []byte("0"), err
 	}
 	b64_msg, err := base64.StdEncoding.DecodeString(message)
+	if err != nil {
+		return nil, err
+	}
 	plain_msg_b64, err := privKey.Decrypt(rand.Reader, b64_msg, nil)
 	if err != nil {
-		return []byte("0"), err
+		return nil, err
 	}
 	plain_msg, _ := base64.StdEncoding.DecodeString(string(plain_msg_b64))
 	return plain_msg, nil
 }
 
-func Encrypt(message string, did string) {
-
+func Encrypt(message string, did string) ([]byte, error) {
+	pubKey, err := getPubKeyOfDID(did)
+	if err != nil {
+		return nil, err
+	}
+	encrypted_msg, err := rsa.EncryptPKCS1v15(rand.Reader, pubKey, []byte(message))
+	if err != nil {
+		return nil, err
+	}
+	return encrypted_msg, nil
 }
 
-func getPubKeyOfDID(did string) *rsa.PublicKey {
-	return nil
+func getPubKeyOfDID(did string) (*rsa.PublicKey, error) {
+	did_obj, err := getDID(did)
+	if err != nil {
+		return nil, err
+	}
+	block, _ := pem.Decode([]byte(did_obj.PubKey))
+	fmt.Println(did_obj.PubKey)
+	key, err := x509.ParsePKIXPublicKey([]byte(block.Bytes))
+	if err != nil {
+		return nil, err
+	}
+	return key.(*rsa.PublicKey), nil
 }
 
 func getPrivKeyOfDID(did string) (*rsa.PrivateKey, error) {

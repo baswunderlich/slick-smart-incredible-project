@@ -58,7 +58,6 @@ func Decrypt(c *gin.Context) {
 		c.IndentedJSON(500, err.Error())
 	}
 	c.IndentedJSON(http.StatusOK, res)
-
 }
 
 func Encrypt(c *gin.Context) {
@@ -67,6 +66,12 @@ func Encrypt(c *gin.Context) {
 	if err := c.BindJSON(&requestBody); err != nil {
 		// DO SOMETHING WITH THE ERROR
 		fmt.Printf("Problems when binding")
-		c.IndentedJSON(400, err)
+		c.IndentedJSON(400, err.Error())
 	}
+
+	res, err := wallet.Encrypt(requestBody.Content, requestBody.Did)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
+	}
+	c.IndentedJSON(http.StatusOK, res)
 }
