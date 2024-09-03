@@ -1,4 +1,4 @@
-package wallet
+package util
 
 type DID struct {
 	DID     string `json:"did"`

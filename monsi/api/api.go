@@ -1,8 +1,11 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
+	"monsi/api/apiutil"
 	"monsi/api/model"
+	"monsi/api/model/enAndDe"
 	"monsi/vcmanager"
 	"monsi/wallet"
 	"net/http"
@@ -13,7 +16,7 @@ import (
 // getAlbums responds with the list of all albums as JSON.
 func ListVCs(c *gin.Context) {
 
-	var requestBody model.ReceiveVCDTO
+	var requestBody model.VCListRetrievalDTO
 
 	if err := c.BindJSON(&requestBody); err != nil {
 		// DO SOMETHING WITH THE ERROR
@@ -45,7 +48,7 @@ func ListDIDs(c *gin.Context) {
 }
 
 func Decrypt(c *gin.Context) {
-	var requestBody model.DecryptDTO
+	var requestBody enAndDe.DecryptDTO
 
 	if err := c.BindJSON(&requestBody); err != nil {
 		// DO SOMETHING WITH THE ERROR
@@ -61,7 +64,7 @@ func Decrypt(c *gin.Context) {
 }
 
 func Encrypt(c *gin.Context) {
-	var requestBody model.DecryptDTO
+	var requestBody enAndDe.DecryptDTO
 
 	if err := c.BindJSON(&requestBody); err != nil {
 		// DO SOMETHING WITH THE ERROR
@@ -85,27 +88,39 @@ func ReceiveMail(c *gin.Context) {
 		c.IndentedJSON(400, err.Error())
 	}
 
-	var orgMail model.OrgMailDTO
+	/*
+		The two things which need to be done when receiving a mail is to test the signature and to decrypt the content.
+		In the end: Return Reviewed OrgMail
+	*/
+	var reviewedOrgMail apiutil.ReviewedOrgMail
 
-	if err := c.BindJSON(&orgMail); err != nil {
-		// DO SOMETHING WITH THE ERROR
-		fmt.Printf("Problems when binding")
-		c.IndentedJSON(400, err.Error())
+	//Test signature
+	//<TODO>
+	//
+
+	//Convert to OrgMail
+	orgMailPlain, err := wallet.Decrypt(requestBody.OrgMail, requestBody.Did)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
 	}
 
-	c.IndentedJSON(http.StatusOK,
-		fmt.Sprintf(`
-	{
-		"subject": %s,
-		"content": %s,
-		"vcs": [
-			{
-				"monsiValid": true
-			},		
-			{			
-				"monsiValid": false
-			}
-		]
+	var orgMail apiutil.OrgMail
+	err = json.Unmarshal(orgMailPlain, &orgMail)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
 	}
-	`, orgMail.Subject, orgMail.Content))
+	//
+
+	//Check vcs and add them to the response
+	for _, v := range orgMail.VCS {
+		rvc := apiutil.GenReviewedVC(v)
+		reviewedOrgMail.VCS = append(reviewedOrgMail.VCS, rvc)
+	}
+	//
+
+	// Prepare orgMail for the response
+	reviewedOrgMail.Subject = orgMail.Subject
+	reviewedOrgMail.Content = orgMail.Content
+	//
+	c.IndentedJSON(http.StatusOK, reviewedOrgMail)
 }

@@ -9,6 +9,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"monsi/util"
 	"os"
 )
 
@@ -22,8 +23,8 @@ func GetDIDsAsString() []string {
 	return res
 }
 
-func GetDIDs() []DID {
-	dids := []DID{}
+func GetDIDs() []util.DID {
+	dids := []util.DID{}
 	content, err := os.ReadFile("./dids.json")
 	if err != nil {
 		fmt.Printf("Could not open a file")
@@ -35,14 +36,14 @@ func GetDIDs() []DID {
 	return dids
 }
 
-func getDID(did string) (DID, error) {
+func getDID(did string) (util.DID, error) {
 	dids := GetDIDs()
 	for _, d := range dids {
 		if d.DID == did {
 			return d, nil
 		}
 	}
-	return DID{}, errors.New("did could not be found")
+	return util.DID{}, errors.New("did could not be found")
 }
 
 func Decrypt(message string, did string) ([]byte, error) {

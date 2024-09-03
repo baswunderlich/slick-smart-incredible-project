@@ -1,4 +1,4 @@
-export namespace wallet {
+export namespace util {
 	
 	export class DID {
 	    did: string;

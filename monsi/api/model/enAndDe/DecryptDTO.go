@@ -1,4 +1,4 @@
-package model
+package enAndDe
 
 type DecryptDTO struct {
 	Content string `json:"content"`

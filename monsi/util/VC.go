@@ -1,4 +1,4 @@
-package vcmanager
+package util
 
 type VC struct {
 	ID      string            `json:"id"`

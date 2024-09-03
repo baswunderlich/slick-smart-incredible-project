@@ -3,10 +3,11 @@ package vcmanager
 import (
 	"encoding/json"
 	"fmt"
+	"monsi/util"
 	"os"
 )
 
-var global_vcs []VC
+var global_vcs []util.VC
 
 func GetVCsAsStrings(did string) []string {
 	vcs := GetVCsOfDID(did)
@@ -18,7 +19,7 @@ func GetVCsAsStrings(did string) []string {
 	return str_results
 }
 
-func GetAllVCs() []VC {
+func GetAllVCs() []util.VC {
 	return global_vcs
 }
 
@@ -26,9 +27,9 @@ func GetVC(vc_id string) []string {
 	return []string{"to be implemented"}
 }
 
-func GetVCsOfDID(did string) []VC {
+func GetVCsOfDID(did string) []util.VC {
 	fmt.Println(global_vcs)
-	var res []VC
+	var res []util.VC
 	for _, vc := range global_vcs {
 		if vc.Subject.ID == did {
 			res = append(res, vc)
@@ -37,15 +38,15 @@ func GetVCsOfDID(did string) []VC {
 	return res
 }
 
-func ReadVCsFromFiles() []VC {
-	var vcs []VC
+func ReadVCsFromFiles() []util.VC {
+	var vcs []util.VC
 	files, err := os.ReadDir("vcs")
 	if err != nil {
 		fmt.Println("The specified directory could not be found: did")
 	}
 
 	for _, f := range files {
-		var decoded_vc VC
+		var decoded_vc util.VC
 		file_content, err1 := os.ReadFile(fmt.Sprintf("./vcs/%s", f.Name()))
 		if err1 != nil {
 			fmt.Println(err)
@@ -59,4 +60,9 @@ func ReadVCsFromFiles() []VC {
 
 	global_vcs = vcs
 	return global_vcs
+}
+
+// This function checks whether the VCs signature is correct and the issuer is trusted <TODO>
+func CheckValidityOfVC(vc util.VC) bool {
+	return false
 }

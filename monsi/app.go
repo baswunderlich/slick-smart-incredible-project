@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"monsi/util"
 	"monsi/vcmanager"
 	"monsi/wallet"
 )
@@ -23,7 +24,7 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) GetListOfDIDs() []wallet.DID {
+func (a *App) GetListOfDIDs() []util.DID {
 	return wallet.GetDIDs()
 }
 
