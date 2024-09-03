@@ -51,15 +51,16 @@ func Decrypt(message string, did string) ([]byte, error) {
 		return []byte("0"), err
 	}
 	b64_msg, err := base64.StdEncoding.DecodeString(message)
+	fmt.Printf("1: %s\n---------\n", b64_msg)
 	if err != nil {
 		return nil, err
 	}
 	plain_msg_b64, err := privKey.Decrypt(rand.Reader, b64_msg, nil)
+	fmt.Printf("2: %s\n---------\n", plain_msg_b64)
 	if err != nil {
 		return nil, err
 	}
-	plain_msg, _ := base64.StdEncoding.DecodeString(string(plain_msg_b64))
-	return plain_msg, nil
+	return plain_msg_b64, nil
 }
 
 func Encrypt(message string, did string) ([]byte, error) {

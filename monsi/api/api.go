@@ -13,7 +13,7 @@ import (
 // getAlbums responds with the list of all albums as JSON.
 func ListVCs(c *gin.Context) {
 
-	var requestBody model.VCDTO
+	var requestBody model.ReceiveVCDTO
 
 	if err := c.BindJSON(&requestBody); err != nil {
 		// DO SOMETHING WITH THE ERROR
@@ -57,7 +57,7 @@ func Decrypt(c *gin.Context) {
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
-	c.IndentedJSON(http.StatusOK, res)
+	c.IndentedJSON(http.StatusOK, string(res))
 }
 
 func Encrypt(c *gin.Context) {
@@ -74,4 +74,38 @@ func Encrypt(c *gin.Context) {
 		c.IndentedJSON(500, err.Error())
 	}
 	c.IndentedJSON(http.StatusOK, res)
+}
+
+func ReceiveMail(c *gin.Context) {
+	var requestBody model.MailDTO
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		// DO SOMETHING WITH THE ERROR
+		fmt.Printf("Problems when binding")
+		c.IndentedJSON(400, err.Error())
+	}
+
+	var orgMail model.OrgMailDTO
+
+	if err := c.BindJSON(&orgMail); err != nil {
+		// DO SOMETHING WITH THE ERROR
+		fmt.Printf("Problems when binding")
+		c.IndentedJSON(400, err.Error())
+	}
+
+	c.IndentedJSON(http.StatusOK,
+		fmt.Sprintf(`
+	{
+		"subject": %s,
+		"content": %s,
+		"vcs": [
+			{
+				"monsiValid": true
+			},		
+			{			
+				"monsiValid": false
+			}
+		]
+	}
+	`, orgMail.Subject, orgMail.Content))
 }
