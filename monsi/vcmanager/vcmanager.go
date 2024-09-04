@@ -14,7 +14,7 @@ func GetVCsAsStrings(did string) []string {
 	str_results := []string{}
 	for _, v := range vcs {
 		fmt.Println(v)
-		str_results = append(str_results, "v.Type[len(v.Type)-1]")
+		str_results = append(str_results, string(v.Type[len(v.Type)-1]))
 	}
 	return str_results
 }
