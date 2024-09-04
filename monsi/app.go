@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"monsi/util"
 	"monsi/vcmanager"
 	"monsi/wallet"
@@ -29,6 +28,5 @@ func (a *App) GetListOfDIDs() []util.DID {
 }
 
 func (a *App) GetListOfVCs(did string) []string {
-	fmt.Printf("Vcs were requested for %s\n", did)
 	return vcmanager.GetVCsAsStrings(did)
 }

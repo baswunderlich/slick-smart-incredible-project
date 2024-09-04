@@ -52,12 +52,10 @@ func Decrypt(message string, did string) ([]byte, error) {
 		return []byte("0"), err
 	}
 	b64_msg, err := base64.StdEncoding.DecodeString(message)
-	fmt.Printf("1: %s\n---------\n", b64_msg)
 	if err != nil {
 		return nil, err
 	}
 	plain_msg_b64, err := privKey.Decrypt(rand.Reader, b64_msg, nil)
-	fmt.Printf("2: %s\n---------\n", plain_msg_b64)
 	if err != nil {
 		return nil, err
 	}
@@ -101,4 +99,9 @@ func getPrivKeyOfDID(did string) (*rsa.PrivateKey, error) {
 		return nil, err
 	}
 	return key.(*rsa.PrivateKey), nil
+}
+
+func Sign(message []byte, did string) ([]byte, error) {
+	//TODO
+	return []byte(`testsignature`), nil
 }

@@ -54,6 +54,7 @@ func startRouter() {
 	router.POST("api/encrypt", api.Encrypt)
 	router.POST("api/decrypt", api.Decrypt)
 	router.POST("api/mail", api.ReceiveMail)
+	router.POST("api/mail/new", api.GenMail)
 
 	router.Run("0.0.0.0:80")
 }

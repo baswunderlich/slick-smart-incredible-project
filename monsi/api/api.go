@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"monsi/api/apiutil"
@@ -55,8 +56,8 @@ func Decrypt(c *gin.Context) {
 		fmt.Printf("Problems when binding")
 		c.IndentedJSON(400, err.Error())
 	}
-
-	res, err := wallet.Decrypt(requestBody.Content, requestBody.Did)
+	src := []byte(requestBody.Content)
+	res, err := wallet.Decrypt(string(src), requestBody.Did)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
@@ -99,7 +100,8 @@ func ReceiveMail(c *gin.Context) {
 	//
 
 	//Convert to OrgMail
-	orgMailPlain, err := wallet.Decrypt(requestBody.OrgMail, requestBody.Did)
+	fmt.Println(string(requestBody.OrgMail))
+	orgMailPlain, err := wallet.Decrypt(string(requestBody.OrgMail), requestBody.Did)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
@@ -123,4 +125,42 @@ func ReceiveMail(c *gin.Context) {
 	reviewedOrgMail.Content = orgMail.Content
 	//
 	c.IndentedJSON(http.StatusOK, reviewedOrgMail)
+}
+
+/*
+This endpoint takes a mail and converts it to a single mail which can be sent to another
+Monsi wallet which can then read the VCs and check signature
+*/
+func GenMail(c *gin.Context) {
+	var requestBody apiutil.NewMail
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		// DO SOMETHING WITH THE ERROR
+		fmt.Printf("Problems when binding")
+		c.IndentedJSON(400, err.Error())
+	}
+
+	var orgMail apiutil.OrgMail
+	orgMail.Subject = requestBody.Subject
+	orgMail.Content = requestBody.Content
+	orgMail.VCS = requestBody.VCS
+
+	var mailObj model.MailDTO
+	mailObj.Did = requestBody.Did
+	orgMailJson, err := json.Marshal(orgMail)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
+	}
+	orgMailEncrypted, err := wallet.Encrypt(string(orgMailJson), mailObj.Did)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
+	}
+	mailObj.OrgMail = base64.StdEncoding.EncodeToString(orgMailEncrypted)
+	signature, err := wallet.Sign([]byte(orgMail.Content), mailObj.Did)
+	mailObj.Signature = string(signature)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
+	}
+
+	c.IndentedJSON(200, mailObj)
 }

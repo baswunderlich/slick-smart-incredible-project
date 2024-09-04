@@ -1,0 +1,18 @@
+{
+    "@context": [
+      "https://www.w3.org/ns/credentials/v2",
+      "https://www.w3.org/ns/credentials/examples/v2"
+    ],
+    "id": "http://university.example/credentials/3732",
+    "type": ["VerifiableCredential", "StudentConfirmation"],
+    "issuer": "did:example:university",
+    "validFrom": "2010-01-01T19:23:24Z",
+    "validUntil": "2020-01-01T19:23:24Z",
+    "credentialSubject": {
+      "id": "did:example:1",
+      "degree": {
+        "type": "StudentConfirmation",
+        "name": "Confirmation"
+      }
+    }
+  }
