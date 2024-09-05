@@ -21,11 +21,19 @@
 
 <div class="row row-full-height">
     <div class="col-2 d-flex flex-column p-0">
+        @* Display an error message if there is one *@
+        @if (ViewBag.Error != null)
+        {
+            <div class="error-message">
+                @Html.Encode(ViewBag.Error)
+            </div>
+        }
         <div class="list-group" id="emailList">
             @foreach (var email in Model.EmailList)
             {
                 <a href="#" class="list-group-item list-group-item-action"
-                   onclick="showContent('@(JavaScriptEncoder.Default.Encode(email.Content))')">
+                   @* onclick="fetchEmailDetails('@(email.Did)', '@(email.Content)')"> *@
+                   onclick="showContent('@(JavaScriptEncoder.Default.Encode(email.Content ?? ""))')">
                     @email.Subject
                 </a>
             }
