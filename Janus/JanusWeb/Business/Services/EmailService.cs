@@ -1,8 +1,11 @@
-﻿using JanusWeb.Models;
+﻿using HtmlAgilityPack;
+using JanusWeb.Models;
 using MailKit;
 using MailKit.Net.Imap;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
 
 
 namespace JanusWeb.Services
@@ -39,12 +42,23 @@ namespace JanusWeb.Services
                 foreach (var summary in results)
                 {
                     var message = client.Inbox.GetMessage(summary.UniqueId);
+                    string content = message.TextBody;
+
+                    if (string.IsNullOrEmpty(content) && !string.IsNullOrEmpty(message.HtmlBody))
+                    {
+                        // Extract plain text from HTML
+                        content = ConvertHtmlToPlainText(message.HtmlBody);
+                    }
+
+                    // Optional: Further sanitize the content if needed
+                    content = SanitizeJsonString(content);
+
                     emails.Add(new Email
                     {
                         Subject = message.Subject,
-                        Sender = message.From.Mailboxes.FirstOrDefault()?.Address,
-                        Date = message.Date.DateTime.ToString(),
-                        Content = message.TextBody
+                        Sender = message.From.Mailboxes.FirstOrDefault()?.Address!,
+                        Date = message.Date.DateTime,
+                        Content = content
                     });
                 }
 
@@ -52,6 +66,52 @@ namespace JanusWeb.Services
             }
 
             return emails;
+        }
+
+        private string ConvertHtmlToPlainText(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            // Extract the inner text from the HTML and then decode the HTML entities
+            string plainText = doc.DocumentNode.InnerText;
+
+            // Decode HTML entities like &quot; to "
+            plainText = WebUtility.HtmlDecode(plainText);
+
+            // Replace non-breaking spaces with regular spaces
+            plainText = plainText.Replace('\u00A0', ' ');
+
+            // Optionally, trim the text to remove leading/trailing whitespace
+            plainText = plainText.Trim();
+
+            return plainText;
+        }
+        private string SanitizeJsonString(string json)
+        {
+            // Remove any extraneous characters or whitespace if necessary
+            // For example, ensure it starts with { and ends with }
+            json = json.Trim();
+
+            if (!json.StartsWith("{"))
+            {
+                int start = json.IndexOf('{');
+                if (start != -1)
+                {
+                    json = json.Substring(start);
+                }
+            }
+
+            if (!json.EndsWith("}"))
+            {
+                int end = json.LastIndexOf('}');
+                if (end != -1)
+                {
+                    json = json.Substring(0, end + 1);
+                }
+            }
+
+            return json;
         }
     }
 }
