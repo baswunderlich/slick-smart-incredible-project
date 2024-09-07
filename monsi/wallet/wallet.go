@@ -1,8 +1,10 @@
 package wallet
 
 import (
+	"crypto"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/sha256"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
@@ -80,7 +82,6 @@ func getPubKeyOfDID(did string) (*rsa.PublicKey, error) {
 		return nil, err
 	}
 	block, _ := pem.Decode([]byte(did_obj.PubKey))
-	fmt.Println(did_obj.PubKey)
 	key, err := x509.ParsePKIXPublicKey([]byte(block.Bytes))
 	if err != nil {
 		return nil, err
@@ -102,6 +103,46 @@ func getPrivKeyOfDID(did string) (*rsa.PrivateKey, error) {
 }
 
 func Sign(message []byte, did string) ([]byte, error) {
+	privKey, err := getPrivKeyOfDID(did)
+	if err != nil {
+		return []byte("0"), err
+	}
+
 	//TODO
-	return []byte(`testsignature`), nil
+	hashed := sha256.Sum256(message)
+
+	// Sign the hashed message using RSA PKCS#1 v1.5
+	signature, err := rsa.SignPKCS1v15(rand.Reader, privKey, crypto.SHA256, hashed[:])
+	if err != nil {
+		return nil, fmt.Errorf("failed to sign message: %v", err)
+	}
+
+	fmt.Println("signature........")
+	fmt.Println(signature)
+	fmt.Println(hashed)
+	fmt.Println("...............")
+	return signature, nil
+}
+
+func VerifySignature(did string, message []byte, signature []byte) error {
+	pubKey, err := getPubKeyOfDID(did)
+	if err != nil {
+		return err
+	}
+
+	// Compute the hash of the message using SHA-256
+	hashed := sha256.Sum256(message)
+
+	// Verify the signature using RSA PKCS#1 v1.5
+
+	fmt.Println("signature........")
+	fmt.Println(signature)
+	fmt.Println(hashed)
+	fmt.Println("...............")
+	err = rsa.VerifyPKCS1v15(pubKey, crypto.SHA256, hashed[:], signature)
+	if err != nil {
+		return fmt.Errorf("signature verification failed: %v", err)
+	}
+
+	return nil
 }

@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"monsi/api/apiutil"
@@ -81,7 +82,7 @@ func Encrypt(c *gin.Context) {
 }
 
 func ReceiveMail(c *gin.Context) {
-	var requestBody model.MailDTO
+	var requestBody model.MonsiMailDTO
 
 	if err := c.BindJSON(&requestBody); err != nil {
 		// DO SOMETHING WITH THE ERROR
@@ -93,46 +94,59 @@ func ReceiveMail(c *gin.Context) {
 		The two things which need to be done when receiving a mail is to test the signature and to decrypt the content.
 		In the end: Return Reviewed OrgMail
 	*/
-	var reviewedOrgMail apiutil.ReviewedOrgMail
-
-	//Test signature
-	//<TODO>
-	//
+	var reviewedOrgMail model.ReviewedMailDTO
 
 	//Convert to OrgMail
-	fmt.Println(string(requestBody.OrgMail))
-	orgMailPlain, err := wallet.Decrypt(string(requestBody.OrgMail), requestBody.Did)
+	mailPlain, err := wallet.Decrypt(string(requestBody.Mail), requestBody.ReceiverDid)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
 
-	var orgMail apiutil.OrgMail
-	err = json.Unmarshal(orgMailPlain, &orgMail)
+	var mail model.MailDTO
+	err = json.Unmarshal(mailPlain, &mail)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
+	}
+	//
+
+	//Verify signature
+	if requestBody.Signature != "" {
+		fmt.Println(requestBody.Signature)
+		fmt.Println(mailPlain)
+		signatureAsBytes, err := hex.DecodeString(requestBody.Signature)
+		if err != nil {
+			c.IndentedJSON(500, err.Error())
+		}
+		err = wallet.VerifySignature(requestBody.SenderDid, mailPlain, signatureAsBytes)
+		if err == nil {
+			reviewedOrgMail.SignatureIsValid = true
+		} else {
+			//For debugging only!!! <TODO>
+			c.IndentedJSON(500, err.Error())
+		}
 	}
 	//
 
 	//Check vcs and add them to the response
-	for _, v := range orgMail.VCS {
+	for _, v := range mail.VCS {
 		rvc := apiutil.GenReviewedVC(v)
 		reviewedOrgMail.VCS = append(reviewedOrgMail.VCS, rvc)
 	}
 	//
 
 	// Prepare orgMail for the response
-	reviewedOrgMail.Subject = orgMail.Subject
-	reviewedOrgMail.Content = orgMail.Content
+	reviewedOrgMail.Subject = mail.Subject
+	reviewedOrgMail.Content = mail.Content
 	//
 	c.IndentedJSON(http.StatusOK, reviewedOrgMail)
 }
 
 /*
-This endpoint takes a mail and converts it to a single mail which can be sent to another
+This endpoint expects mail data and converts it to a single mail which can be sent to another
 Monsi wallet which can then read the VCs and check signature
 */
 func GenMail(c *gin.Context) {
-	var requestBody apiutil.NewMail
+	var requestBody model.GenMailDTO
 
 	if err := c.BindJSON(&requestBody); err != nil {
 		// DO SOMETHING WITH THE ERROR
@@ -140,26 +154,33 @@ func GenMail(c *gin.Context) {
 		c.IndentedJSON(400, err.Error())
 	}
 
-	var orgMail apiutil.OrgMail
-	orgMail.Subject = requestBody.Subject
-	orgMail.Content = requestBody.Content
-	orgMail.VCS = requestBody.VCS
+	var mail model.MailDTO
+	mail.Subject = requestBody.Mail.Subject
+	mail.Content = requestBody.Mail.Content
+	mail.VCS = requestBody.Mail.VCS
 
-	var mailObj model.MailDTO
-	mailObj.Did = requestBody.Did
-	orgMailJson, err := json.Marshal(orgMail)
+	var mailObj model.MonsiMailDTO
+	mailObj.ReceiverDid = requestBody.ReceiverDid
+	mailObj.SenderDid = requestBody.SenderDid
+	mailJson, err := json.Marshal(mail)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
-	orgMailEncrypted, err := wallet.Encrypt(string(orgMailJson), mailObj.Did)
+	fmt.Println(mailJson)
+	fmt.Println(string(mailJson))
+	mailContentEncrypted, err := wallet.Encrypt(string(mailJson), mailObj.ReceiverDid)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
-	mailObj.OrgMail = base64.StdEncoding.EncodeToString(orgMailEncrypted)
-	signature, err := wallet.Sign([]byte(orgMail.Content), mailObj.Did)
-	mailObj.Signature = string(signature)
-	if err != nil {
-		c.IndentedJSON(500, err.Error())
+	mailObj.Mail = base64.StdEncoding.EncodeToString(mailContentEncrypted)
+
+	//Sign if a senderDid was given
+	if mailObj.SenderDid != "" {
+		signature, err := wallet.Sign(mailJson, mailObj.SenderDid)
+		mailObj.Signature = hex.EncodeToString(signature)
+		if err != nil {
+			c.IndentedJSON(500, err.Error())
+		}
 	}
 
 	c.IndentedJSON(200, mailObj)

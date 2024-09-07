@@ -1,10 +1,9 @@
 package model
 
-/*
-This is supposed to be sent by Janus to Monsi
-*/
+import "monsi/util"
+
 type MailDTO struct {
-	Did       string `json:"did"`       //The DID of the receiver
-	OrgMail   string `json:"orgMail"`   //encrypted original mail in base64
-	Signature string `json:"signature"` //proove of integrity of the rest
+	Subject string    `json:"subject"`
+	Content string    `json:"content"`
+	VCS     []util.VC `json:"vcs"`
 }
