@@ -121,8 +121,9 @@ func ReceiveMail(c *gin.Context) {
 		if err == nil {
 			reviewedOrgMail.SignatureIsValid = true
 		} else {
-			//For debugging only!!! <TODO>
-			c.IndentedJSON(500, err.Error())
+			//One could also stop the reading of the mail if the signature is invalid. We decided to just show the user that something is
+			//wrong with the signature and let him make his own decision
+			reviewedOrgMail.SignatureIsValid = false
 		}
 	}
 	//
