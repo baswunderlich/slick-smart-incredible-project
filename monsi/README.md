@@ -18,3 +18,6 @@ To build a redistributable, production mode package, use `wails build`.
 ## Site for key pair generation
 
 https://8gwifi.org/RSAFunctionality?rsasignverifyfunctions=rsasignverifyfunctions&keysize=2048
+
+## VCs 
+the only valid VC is bachelorDegree.json
