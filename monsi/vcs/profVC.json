@@ -10,9 +10,13 @@
     "validUntil": "2020-01-01T19:23:24Z",
     "credentialSubject": {
       "id": "did:example:2",
-      "degree": {
+      "authorization": {
         "type": "ProfConfirmation",
         "name": "Confirmation"
       }
+    },
+    "proof": {
+      "type": "DataIntegrityProof",
+      "proofValue": "94e4e36e12f33fbc06a3f5580900885a560853098c8ed662d518a48931157fae4dcad372b79490365086cc5a734c7486d63e6945e5b66b8666d44b9e84e02aed66150059bfd2e0c77caf718ac54fa5bbeec4f567329ff58ea01ce644775dcf63c73e0317b514793c68ff7951c6d99f908df1afb07e003d58ef0be9fcf30c21bc"
     }
   }

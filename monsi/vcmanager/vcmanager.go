@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"monsi/util"
+	"monsi/wallet"
 	"os"
 )
 
@@ -28,7 +29,6 @@ func GetVC(vc_id string) []string {
 }
 
 func GetVCsOfDID(did string) []util.VC {
-	fmt.Println(global_vcs)
 	var res []util.VC
 	for _, vc := range global_vcs {
 		if vc.Subject.ID == did {
@@ -65,4 +65,30 @@ func ReadVCsFromFiles() []util.VC {
 // This function checks whether the VCs signature is correct and the issuer is trusted <TODO>
 func CheckValidityOfVC(vc util.VC) bool {
 	return false
+}
+
+func isVCValid(v *util.VC) bool {
+	pvc := genProoflessVC(v)
+	json, err := json.Marshal(pvc)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+	err = wallet.VerifySignature(v.Issuer, json, []byte(v.Proof.ProofValue))
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func genProoflessVC(v *util.VC) util.ProoflessVC {
+	var pvc util.ProoflessVC
+	pvc.ID = v.ID
+	pvc.Issuer = v.Issuer
+	pvc.Subject = v.Subject
+	pvc.Type = v.Type
+	pvc.ValidFrom = v.ValidFrom
+	pvc.ValidUntil = v.ValidUntil
+	pvc.Subject = v.Subject
+	return pvc
 }

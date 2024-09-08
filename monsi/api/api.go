@@ -58,7 +58,7 @@ func Decrypt(c *gin.Context) {
 		c.IndentedJSON(400, err.Error())
 	}
 	src := []byte(requestBody.Content)
-	res, err := wallet.Decrypt(string(src), requestBody.Did)
+	res, err := wallet.DecryptRSA(string(src), requestBody.Did)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
@@ -74,7 +74,7 @@ func Encrypt(c *gin.Context) {
 		c.IndentedJSON(400, err.Error())
 	}
 
-	res, err := wallet.Encrypt(requestBody.Content, requestBody.Did)
+	res, err := wallet.EncryptRSA(requestBody.Content, requestBody.Did)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
@@ -96,14 +96,31 @@ func ReceiveMail(c *gin.Context) {
 	*/
 	var reviewedOrgMail model.ReviewedMailDTO
 
+	//Decrypt AES key needed for further encryption
+	fmt.Printf("AESKey1: %s\n", requestBody.AESKey)
+	aesKeyBase64Bytes, err := wallet.DecryptRSA(requestBody.AESKey, requestBody.ReceiverDid)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
+	}
+	fmt.Printf("AESKey2: %s\n", aesKeyBase64Bytes)
+	aesKeyBase64 := string(aesKeyBase64Bytes)
+	fmt.Printf("AESKey3: %s\n", aesKeyBase64)
+
+	var aesKey []byte
+	aesKey, err = base64.StdEncoding.DecodeString(aesKeyBase64)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
+	}
+	//
+
 	//Convert to OrgMail
-	mailPlain, err := wallet.Decrypt(string(requestBody.Mail), requestBody.ReceiverDid)
+	mailPlain, err := wallet.DecryptAES(string(requestBody.Mail), aesKey)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
 
 	var mail model.MailDTO
-	err = json.Unmarshal(mailPlain, &mail)
+	err = json.Unmarshal([]byte(mailPlain), &mail)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
@@ -111,13 +128,11 @@ func ReceiveMail(c *gin.Context) {
 
 	//Verify signature
 	if requestBody.Signature != "" {
-		fmt.Println(requestBody.Signature)
-		fmt.Println(mailPlain)
 		signatureAsBytes, err := hex.DecodeString(requestBody.Signature)
 		if err != nil {
 			c.IndentedJSON(500, err.Error())
 		}
-		err = wallet.VerifySignature(requestBody.SenderDid, mailPlain, signatureAsBytes)
+		err = wallet.VerifySignature(requestBody.SenderDid, []byte(mailPlain), signatureAsBytes)
 		if err == nil {
 			reviewedOrgMail.SignatureIsValid = true
 		} else {
@@ -155,6 +170,7 @@ func GenMail(c *gin.Context) {
 		c.IndentedJSON(400, err.Error())
 	}
 
+	//Add simple values to the response
 	var mail model.MailDTO
 	mail.Subject = requestBody.Mail.Subject
 	mail.Content = requestBody.Mail.Content
@@ -167,13 +183,27 @@ func GenMail(c *gin.Context) {
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
-	fmt.Println(mailJson)
-	fmt.Println(string(mailJson))
-	mailContentEncrypted, err := wallet.Encrypt(string(mailJson), mailObj.ReceiverDid)
+	//
+
+	//Generate the AES key and encrypt it
+	aesKey, _ := wallet.GenAESKey()
+	aesKeyBase64 := base64.StdEncoding.EncodeToString(aesKey)
+	fmt.Printf("AESKey1: %s\n", aesKeyBase64)
+	aesKeyBase64Encrypted, err := wallet.EncryptRSA(aesKeyBase64, mailObj.ReceiverDid)
 	if err != nil {
 		c.IndentedJSON(500, err.Error())
 	}
-	mailObj.Mail = base64.StdEncoding.EncodeToString(mailContentEncrypted)
+	fmt.Printf("AESKey2: %s\n", base64.StdEncoding.EncodeToString(aesKeyBase64Encrypted))
+	mailObj.AESKey = base64.StdEncoding.EncodeToString(aesKeyBase64Encrypted)
+	//
+
+	//Encrypt mail content
+	mailContentEncrypted, err := wallet.EncryptAES(string(mailJson), aesKey)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
+	}
+	mailObj.Mail = mailContentEncrypted
+	//
 
 	//Sign if a senderDid was given
 	if mailObj.SenderDid != "" {
@@ -183,6 +213,7 @@ func GenMail(c *gin.Context) {
 			c.IndentedJSON(500, err.Error())
 		}
 	}
+	//
 
 	c.IndentedJSON(200, mailObj)
 }
