@@ -1,6 +1,7 @@
 package vcmanager
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"monsi/util"
@@ -64,7 +65,7 @@ func ReadVCsFromFiles() []util.VC {
 
 // This function checks whether the VCs signature is correct and the issuer is trusted <TODO>
 func CheckValidityOfVC(vc util.VC) bool {
-	return false
+	return isVCValid(&vc)
 }
 
 func isVCValid(v *util.VC) bool {
@@ -74,15 +75,24 @@ func isVCValid(v *util.VC) bool {
 		fmt.Println(err.Error())
 		return false
 	}
-	err = wallet.VerifySignature(v.Issuer, json, []byte(v.Proof.ProofValue))
+	fmt.Printf("json: \n%s\n", json)
+	proofValueAsBytes, err := base64.StdEncoding.DecodeString(v.Proof.ProofValue)
+	fmt.Printf("pv: \n%s\n", v.Proof.ProofValue)
 	if err != nil {
+		fmt.Println(err.Error())
 		return false
 	}
-	return true
+	err = wallet.VerifySignature(v.Issuer, json, proofValueAsBytes)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+	return err == nil
 }
 
 func genProoflessVC(v *util.VC) util.ProoflessVC {
 	var pvc util.ProoflessVC
+	pvc.Context = v.Context
 	pvc.ID = v.ID
 	pvc.Issuer = v.Issuer
 	pvc.Subject = v.Subject

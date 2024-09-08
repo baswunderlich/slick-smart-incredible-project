@@ -1,6 +1,7 @@
 package util
 
 type ProoflessVC struct {
+	Context    []string          `json:"@context"`
 	ID         string            `json:"id"`
 	Type       []string          `json:"type"`
 	Issuer     string            `json:"issuer"`

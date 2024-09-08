@@ -81,7 +81,7 @@ func Encrypt(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, res)
 }
 
-func ReceiveMail(c *gin.Context) {
+func RecieveMail(c *gin.Context) {
 	var requestBody model.MonsiMailDTO
 
 	if err := c.BindJSON(&requestBody); err != nil {

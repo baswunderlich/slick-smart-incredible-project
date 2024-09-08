@@ -1,7 +1,7 @@
 package util
 
 type VC struct {
-	Context    []string          `json:"context"`
+	Context    []string          `json:"@context"`
 	ID         string            `json:"id"`
 	Type       []string          `json:"type"`
 	Issuer     string            `json:"issuer"`

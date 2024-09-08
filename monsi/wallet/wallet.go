@@ -85,11 +85,11 @@ func getPubKeyOfDID(did string) (*rsa.PublicKey, error) {
 		return nil, err
 	}
 	block, _ := pem.Decode([]byte(did_obj.PubKey))
-	key, err := x509.ParsePKCS1PublicKey([]byte(block.Bytes))
+	key, err := x509.ParsePKIXPublicKey([]byte(block.Bytes))
 	if err != nil {
 		return nil, err
 	}
-	return key, nil
+	return key.(*rsa.PublicKey), nil
 }
 
 func getPrivKeyOfDID(did string) (*rsa.PrivateKey, error) {
@@ -98,11 +98,11 @@ func getPrivKeyOfDID(did string) (*rsa.PrivateKey, error) {
 		return nil, err
 	}
 	block, _ := pem.Decode([]byte(did_obj.PrivKey))
-	key, err := x509.ParsePKCS8PrivateKey([]byte(block.Bytes))
+	key, err := x509.ParsePKCS1PrivateKey([]byte(block.Bytes))
 	if err != nil {
 		return nil, err
 	}
-	return key.(*rsa.PrivateKey), nil
+	return key, nil
 }
 
 func Sign(message []byte, did string) ([]byte, error) {
@@ -120,13 +120,12 @@ func Sign(message []byte, did string) ([]byte, error) {
 		return nil, fmt.Errorf("failed to sign message: %v", err)
 	}
 
-	fmt.Println("signature........")
-	fmt.Println(signature)
-	fmt.Println(hashed)
-	fmt.Println("...............")
 	return signature, nil
 }
 
+/*
+This method expects the signature in
+*/
 func VerifySignature(did string, message []byte, signature []byte) error {
 	pubKey, err := getPubKeyOfDID(did)
 	if err != nil {
@@ -138,10 +137,6 @@ func VerifySignature(did string, message []byte, signature []byte) error {
 
 	// Verify the signature using RSA PKCS#1 v1.5
 
-	fmt.Println("signature........")
-	fmt.Println(signature)
-	fmt.Println(hashed)
-	fmt.Println("...............")
 	err = rsa.VerifyPKCS1v15(pubKey, crypto.SHA256, hashed[:], signature)
 	if err != nil {
 		return fmt.Errorf("signature verification failed: %v", err)
