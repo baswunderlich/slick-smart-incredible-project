@@ -21,3 +21,5 @@ https://8gwifi.org/RSAFunctionality?rsasignverifyfunctions=rsasignverifyfunction
 
 ## VCs 
 the only valid VC is bachelorDegree.json
+
+Currently the VC are signed by the site under "Site for key pair generation". For own key generation to be helpful it would also be necessary to create the signatures with an own script.
