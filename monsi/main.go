@@ -50,6 +50,7 @@ func startRouter() {
 	fmt.Println("Router started ...")
 	router := gin.Default()
 	router.POST("api/vc", api.ListVCs)
+	router.POST("api/vc/sign", api.SignVC)
 	router.GET("api/did", api.ListDIDs)
 	router.POST("api/encrypt", api.Encrypt)
 	router.POST("api/decrypt", api.Decrypt)

@@ -102,3 +102,18 @@ func genProoflessVC(v *util.VC) util.ProoflessVC {
 	pvc.Subject = v.Subject
 	return pvc
 }
+
+func SignVC(vc util.ProoflessVC) (*util.VC, error) {
+	vcJson, err := json.Marshal(vc)
+	if err != nil {
+		return nil, err
+	}
+	signature, err := wallet.Sign(vcJson, vc.Issuer)
+	if err != nil {
+		return nil, err
+	}
+	var signedVC util.VC
+	json.Unmarshal(vcJson, &signedVC)
+	signedVC.Proof = util.Proof{Type: "DataIntegrityProof", ProofValue: base64.StdEncoding.EncodeToString(signature)}
+	return &signedVC, nil
+}

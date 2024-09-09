@@ -8,6 +8,7 @@ import (
 	"monsi/api/apiutil"
 	"monsi/api/model"
 	"monsi/api/model/enAndDe"
+	"monsi/util"
 	"monsi/vcmanager"
 	"monsi/wallet"
 	"net/http"
@@ -216,4 +217,23 @@ func GenMail(c *gin.Context) {
 	//
 
 	c.IndentedJSON(200, mailObj)
+}
+
+/*
+This API endpoint takes a prooflessVC and returns it with a proof. The resulting VC can directly be used
+*/
+func SignVC(c *gin.Context) {
+	var requestBody util.ProoflessVC
+
+	if err := c.BindJSON(&requestBody); err != nil {
+		// DO SOMETHING WITH THE ERROR
+		fmt.Printf("Problems when binding")
+		c.IndentedJSON(400, err.Error())
+	}
+
+	signedVC, err := vcmanager.SignVC(requestBody)
+	if err != nil {
+		c.IndentedJSON(500, err.Error())
+	}
+	c.IndentedJSON(200, signedVC)
 }
