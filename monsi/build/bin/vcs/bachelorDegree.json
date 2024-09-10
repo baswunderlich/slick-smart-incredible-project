@@ -1,18 +1,22 @@
 {
-    "@context": [
-      "https://www.w3.org/ns/credentials/v2",
-      "https://www.w3.org/ns/credentials/examples/v2"
-    ],
-    "id": "http://university.example/credentials/3732",
-    "type": ["VerifiableCredential", "ExampleDegreeCredential"],
-    "issuer": "did:example:university",
-    "validFrom": "2010-01-01T19:23:24Z",
-    "validUntil": "2020-01-01T19:23:24Z",
-    "credentialSubject": {
-      "id": "did:example:1",
-      "degree": {
-        "type": "ExampleBachelorDegree",
-        "name": "Bachelor of Science and Arts"
-      }
+  "@context": [
+    "https://www.w3.org/ns/credentials/v2",
+    "https://www.w3.org/ns/credentials/examples/v2"
+  ],
+  "id": "http://university.example/credentials/3732",
+  "type": ["VerifiableCredential", "ExampleDegreeCredential"],
+  "issuer": "did:example:university",
+  "validFrom": "2010-01-01T19:23:24Z",
+  "validUntil": "2020-01-01T19:23:24Z",
+  "credentialSubject": {
+    "id": "did:example:1",
+    "authorization": {
+      "type": "ExampleBachelorDegree",
+      "name": "Bachelor of Science and Arts"
     }
+  },
+  "proof": {
+    "type": "DataIntegrityProof",
+    "proofValue": "KbVEppqEGe6rYtghX9GsjXiC5GMn5Ui0EeWplpUfT8p0qAO/hsdmj17zaxWoQuDVHcNHVlIs2V6E9a5TsMopJgbdQaO+PftKPpA+dMkhlrA/aDDUG7hiVrLQOIutpVxfbUQhhH/CIlXdXZSvcPX/aPfvctu/t0Ru052Gwrqc+cZJaRhC8Oc0JOBS7YGn26Srnf104kjL1Qxqg6J1GJldmsFuHjWZHN/A77cLkgMjl5RT2irjHnTC8L6+AhGFy5Y2ITp1RIQhgZgVyvQHjeQKUkIhRvDuKh3y6ThtQbSPYSxzCJvyjBJwn8pukXH6tIn28lngtoUg+pZWwomT1m9uTw=="
   }
+}
