@@ -17,25 +17,25 @@
 <form asp-action="SendEmail" method="post">
     <div class="form-group">
         <label for="recipientEmail">To:</label>
-        <input type="email" id="recipientEmail" name="recipientEmail" class="form-control" required />
+        <input type="email" id="recipientEmail" name="recipientEmail" class="form-control" value="a@b.cd" required />
     </div>
     
     <div class="form-group row">
         <div class="col-6">
             <label for="Subject">Subject:</label>
-            <input type="text" id="Subject" name="Subject" class="form-control" required />
+            <input type="text" id="Subject" name="Subject" class="form-control" value="mySubject" required />
         </div>
 
         <div class=" col-6">
             <label for="DID">DID:</label>
-            <input type="text" id="DID" name="DID" class="form-control" required />
+            <input type="text" id="DID" name="DID" class="form-control" value="did:example:1" required />
         </div>
     </div>
     
 
     <div class="form-group">
         <label for="Body">Message:</label>
-        <textarea id="Body" name="Body" class="form-control" rows="10" required></textarea>
+        <textarea id="Body" name="Body" class="form-control" rows="10" required>Dies ist ein Test</textarea>
     </div>
 
     <button type="submit" class="btn btn-primary">Send Email</button>
