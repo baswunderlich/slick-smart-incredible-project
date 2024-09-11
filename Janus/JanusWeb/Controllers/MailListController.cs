@@ -31,7 +31,8 @@ namespace JanusWeb.Controllers
                 {
                     // Example JSON content stored as a string
                     string jsonContent = email.Content;
-                    if (jsonContent == null) {
+                    if (jsonContent == null)
+                    {
                         ViewBag.Error = $"no content in mail";
                         continue;
                     }
@@ -42,27 +43,28 @@ namespace JanusWeb.Controllers
                     if (mailContent == null) // parsing failed
                     {
                         ViewBag.Error = $"parsing failed; original mail content: {jsonContent}";
-                        continue; 
+                        continue;
                     }
 
-                    email.Did = mailContent.did;
+                    email.Did = mailContent.receiverDid;
                     email.Signature = mailContent.signature;
 
-                    // Create a DecryptRequest object
-                    DecryptRequest decryptRequest = new DecryptRequest
-                    {
-                        did = mailContent.did,
-                        content = mailContent.orgMail
-                    };
 
-                    // Convert the request object to JSON
-                    string requestJson = JsonSerializer.Serialize(decryptRequest);
+                    string requestJson = JsonSerializer.Serialize(mailContent);
                     StringContent httpContent = new StringContent(requestJson, Encoding.UTF8, "application/json");
 
-                    // Send the POST request to the API
-                    HttpResponseMessage response = await _httpClient.PostAsync("http://localhost:80/api/decrypt", httpContent);
+                    HttpResponseMessage? response = null;
+                    try
+                    {
+                        // Send the POST request to the API
+                        response = await _httpClient.PostAsync("http://localhost:80/api/mail", httpContent);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.Error = $"API request failed, is the wallet offline?";
+                    }
 
-                    if (response.IsSuccessStatusCode)
+                    if (response != null && response.IsSuccessStatusCode)
                     {
 
                         // Read and deserialize the response content
@@ -77,22 +79,58 @@ namespace JanusWeb.Controllers
 
                         if (decryptResponse != null)
                         {
-                            email.Content = $"{decryptResponse.content}\n\n ----original encrypted mail---- \n\n{email.Content}";
+                            CheckVcsForValidityAndSetInMail(email, decryptResponse);
+                            email.Content = $"VC check: {email.VCValid}\n\n{decryptResponse.content}\n\n ----original encrypted mail---- \n\n{email.Content}";
+                            email.Subject += $": {decryptResponse.subject}";
                         }
                         else
                         {
                             ViewBag.Error = $"Failed to parse decryption response; original response: {responseContent}";
                         }
                     }
-                    else
+                    else if (response == null)
                     {
-                        ViewBag.Error = $"API call failed with status code: {response.StatusCode}";
+                        ViewBag.Error = $"no response!";
+                    }
+                    else if (!response.IsSuccessStatusCode)
+                    {
+                        ViewBag.Error = $"Response not successfull, status code: {response.StatusCode}";
                     }
                 }
 
             }
 
             return View(maillist);
+        }
+
+        private static void CheckVcsForValidityAndSetInMail(Email email, DecryptResponse decryptResponse)
+        {
+            int validVCCounter = 0;
+            string vcValid = "";
+
+            foreach (var vc in decryptResponse.reviewedVCs)
+            {
+                if (vc.TryGetProperty("monsiValid", out JsonElement monsiValid))
+                {
+                    bool isValid = monsiValid.GetBoolean();
+
+                    if (!isValid)
+                    {
+                        // Serialize the VC JsonElement back to a string to display it
+                        vcValid += $"The VC is not valid! {vc.GetRawText()}<br/>";
+                    }
+                    else
+                    {
+                        validVCCounter++;
+                    }
+                }
+            }
+
+            if (validVCCounter == decryptResponse.reviewedVCs.Count)
+            {
+                vcValid = "All VCs are valid!";
+            }
+            email.VCValid = vcValid;
         }
     }
 }
