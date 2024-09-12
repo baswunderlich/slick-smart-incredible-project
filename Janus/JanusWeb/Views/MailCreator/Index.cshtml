@@ -19,23 +19,47 @@
         <label for="recipientEmail">To:</label>
         <input type="email" id="recipientEmail" name="recipientEmail" class="form-control" value="a@b.cd" required />
     </div>
-    
+
     <div class="form-group row">
         <div class="col-6">
             <label for="Subject">Subject:</label>
             <input type="text" id="Subject" name="Subject" class="form-control" value="mySubject" required />
         </div>
 
-        <div class=" col-6">
+        <div class="col-6">
             <label for="DID">DID:</label>
             <input type="text" id="DID" name="DID" class="form-control" value="did:example:1" required />
         </div>
     </div>
-    
 
     <div class="form-group">
         <label for="Body">Message:</label>
         <textarea id="Body" name="Body" class="form-control" rows="10" required>Dies ist ein Test</textarea>
+    </div>
+
+    <!-- Collapsible VC Selection -->
+    <div class="mb-3">
+        <p>
+            <a class="btn btn-secondary" data-bs-toggle="collapse" href="#vcSelection" role="button" aria-expanded="false" aria-controls="vcSelection">
+                Select Verifiable Credentials (VCs)
+            </a>
+        </p>
+        <div class="collapse" id="vcSelection">
+            <div class="card card-body">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="VC1" id="vc1" name="vcs" />
+                    <label class="form-check-label" for="vc1">VC 1</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="VC2" id="vc2" name="vcs" />
+                    <label class="form-check-label" for="vc2">VC 2</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="VC3" id="vc3" name="vcs" />
+                    <label class="form-check-label" for="vc3">VC 3</label>
+                </div>
+            </div>
+        </div>
     </div>
 
     <button type="submit" class="btn btn-primary">Send Email</button>
