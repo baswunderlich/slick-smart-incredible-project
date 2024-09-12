@@ -10,10 +10,42 @@ namespace JanusWeb.Controllers
 {
     public class MailCreatorController : Controller
     {
+        private readonly HttpClient _httpClient;
+
+        public MailCreatorController(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
             return View();  // Return the page to create and send an email
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FetchVCs([FromBody] FetchVCsRequest request)
+        {
+            var did = request.Did;
+            try
+            {
+                var response = await _httpClient.PostAsync("http://localhost:80/api/vc",
+                    new StringContent($"{{\"did\":\"{did}\"}}", Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var vcsJson = await response.Content.ReadAsStringAsync();
+                    return Content(vcsJson, "application/json");
+                }
+                else
+                {
+                    return StatusCode((int)response.StatusCode, $"Error fetching VCs: {response.ReasonPhrase}");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost]
