@@ -2,10 +2,7 @@
 using JanusWeb.Models;
 using MailKit;
 using MailKit.Net.Imap;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text.RegularExpressions;
 
 
 namespace JanusWeb.Services
