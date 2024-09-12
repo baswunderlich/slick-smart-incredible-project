@@ -32,7 +32,7 @@ func GetVC(vc_id string) []string {
 func GetVCsOfDID(did string) []util.VC {
 	var res []util.VC
 	for _, vc := range global_vcs {
-		if vc.Subject.ID == did {
+		if vc.Subject["id"] == did {
 			res = append(res, vc)
 		}
 	}

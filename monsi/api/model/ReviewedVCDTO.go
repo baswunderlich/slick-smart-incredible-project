@@ -13,6 +13,6 @@ type ReviewedVCDTO struct {
 	Issuer     string                 `json:"issuer"`
 	ValidFrom  string                 `json:"validFrom"`
 	ValidUntil string                 `json:"validUntil"`
-	Subject    util.CredentialSubject `json:"credentialSubject"`
+	Subject    map[string]interface{} `json:"credentialSubject"`
 	Proof      util.Proof             `json:"proof"`
 }
