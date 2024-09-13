@@ -6,6 +6,7 @@ import (
 	"monsi/api"
 	"monsi/vcmanager"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -57,5 +58,8 @@ func startRouter() {
 	router.POST("api/mail", api.RecieveMail)
 	router.POST("api/mail/new", api.GenMail)
 
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+	}))
 	router.Run("0.0.0.0:80")
 }
