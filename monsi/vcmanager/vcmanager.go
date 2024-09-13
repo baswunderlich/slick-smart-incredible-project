@@ -7,6 +7,7 @@ import (
 	"monsi/util"
 	"monsi/wallet"
 	"os"
+	"time"
 )
 
 var global_vcs []util.VC
@@ -68,6 +69,10 @@ func CheckValidityOfVC(vc util.VC) bool {
 	return isVCValid(&vc)
 }
 
+func inTimeSpan(start, end, check time.Time) bool {
+	return check.After(start) && check.Before(end)
+}
+
 func isVCValid(v *util.VC) bool {
 	pvc := genProoflessVC(v)
 	json, err := json.Marshal(pvc)
@@ -82,12 +87,27 @@ func isVCValid(v *util.VC) bool {
 		fmt.Println(err.Error())
 		return false
 	}
+
+	//Verify correct signature
 	err = wallet.VerifySignature(v.Issuer, json, proofValueAsBytes)
 	if err != nil {
 		fmt.Println(err.Error())
 		return false
 	}
-	return err == nil
+
+	//Verify VC is valid (time)
+	pattern := "2006-02-01T15:04:05Z"
+	validFromTime, err := time.Parse(pattern, pvc.ValidFrom)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+	validUntilTime, err := time.Parse(pattern, pvc.ValidUntil)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+	return inTimeSpan(validFromTime, validUntilTime, time.Now())
 }
 
 func genProoflessVC(v *util.VC) util.ProoflessVC {
