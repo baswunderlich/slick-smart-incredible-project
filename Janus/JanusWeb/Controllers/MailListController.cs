@@ -29,7 +29,7 @@ namespace JanusWeb.Controllers
             // extract the did from the mail body, empty string if not found
             foreach (var email in maillist.EmailList)
             {
-                if (email.Subject.Contains("monsi"))
+                if (email.Subject.ToLower().Contains("monsi"))
                 {
                     await ProcessMonsiMailAsync(email);
                 }
