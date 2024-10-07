@@ -7,5 +7,6 @@
         public string SenderDID { get; set; }
         public string ReceiverDID { get; set; }
         public string Body { get; set; }
+        public string[] SelectedVCs { get; set; }
     }
 }

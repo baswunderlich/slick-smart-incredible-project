@@ -71,7 +71,10 @@ namespace JanusWeb.Controllers
 
             // Replace encoded '+' characters
             jsonPayload = jsonPayload.Replace("\\u002B", "+");
-            jsonPayload = jsonPayload.Replace("context", "@context");
+            jsonPayload = jsonPayload.Replace("\\u0022", "\"");
+            jsonPayload = jsonPayload.Replace("\"[", "");
+            jsonPayload = jsonPayload.Replace("]\"", "");
+            //jsonPayload = jsonPayload.Replace("context", "@context");
 
             // Call API to encrypt the email content
             string encryptedContent;
@@ -131,37 +134,13 @@ namespace JanusWeb.Controllers
 
         private object CreateMailContent(MailFormModel formModel)
         {
-            // Construct the mail content with a hardcoded VC
+            var selectedVCs = formModel.SelectedVCs;
+
             return new
             {
                 subject = formModel.Subject,
                 content = formModel.Body,
-                vcs = new[]
-                {
-            new
-            {
-                // Hardcoded VC structure
-                context = new[] {
-                    "https://www.w3.org/ns/credentials/v2",
-                    "https://www.w3.org/ns/credentials/examples/v2"
-                },
-                id = "http://university.example/credentials/3732",
-                type = new[] { "VerifiableCredential", "ExamPariticipationConfirmation" },
-                issuer = "did:example:university",
-                validFrom = "2010-01-01T19:23:24Z",
-                validUntil = "2020-01-01T19:23:24Z",
-                credentialSubject = new
-                {
-                    id = formModel.DID, // Using the receiver DID from the form
-                    authorization = new { type = "", name = "" }
-                },
-                proof = new
-                {
-                    type = "DataIntegrityProof",
-                    proofValue = "dUXMAC/5kRTyUm2Cx1uaP9MWBZGpAryhTEAP0rkRFkmoU806Y5YCKPkcb4jZtv87OfhNs+tp3EQyz2PCSVIrSFPtG70JYWRnJEmQPgfvhrwdYdcC/vPiW8H+SiUAc8Z+Gu8eKn6fjwnVzWvBWaMzBkEDj2m0Vna9KOCYLYLmFMEIpOCLmw67ywkLIqkiIABt2EPyZ38f81D8xu9IjTnxCcvhpXzmqBkRXUP8kjKGiBlcsY4LQ+dxsbLzoTMsc36JXERi46Yw0kVn3Doavvy6HC5ajo8yLdFVI1eaJrN4y6IOYafknBfq0E3mV2VbAHakG6sdYcPWEKq+SvNpH5VOIw=="
-                }
-            }
-        }
+                vcs = selectedVCs // Use the selected VCs from the frontend
             };
         }
     }

@@ -92,6 +92,9 @@
                     Select Verifiable Credentials (VCs)
                 </button>
 
+                <!-- Hidden input to store selected VCs -->
+                <input type="hidden" id="selectedVCs" name="SelectedVCs" />
+
                 <button type="submit" class="btn btn-primary mt-1">Send Email</button>
             </form>
         </div>
@@ -161,12 +164,29 @@
         vcs.forEach(vc => {
             const vcElement = document.createElement('div');
             vcElement.className = 'form-check';
+            // Store the full VC as a JSON string in the data-vc attribute
             vcElement.innerHTML = `
-                <input class="form-check-input" type="checkbox" value="${vc.id}" id="vc${vc.id}" name="vcs" />
-                <label class="form-check-label" for="vc${vc.id}">${vc.credentialSubject.authorization.type}</label>
-            `;
+                    <input class="form-check-input" type="checkbox" id="vc${vc.id}" data-vc='${JSON.stringify(vc)}' />
+                    <label class="form-check-label" for="vc${vc.id}">
+                        ${vc.credentialSubject.authorization.type}
+                    </label>
+                `;
             vcContainer.appendChild(vcElement);
         });
+
+        // Listen for checkbox changes
+        document.querySelectorAll('.form-check-input').forEach(input => {
+            input.addEventListener('change', updateSelectedVCs);
+        });
+    }
+
+    // Function to update hidden input with full VC objects when selected/deselected
+    function updateSelectedVCs() {
+        const selectedVCs = Array.from(document.querySelectorAll('.form-check-input:checked'))
+            .map(input => JSON.parse(input.getAttribute('data-vc'))); // Get full VC objects
+
+        // Update the hidden input field with the selected VCs as JSON
+        document.getElementById('selectedVCs').value = JSON.stringify(selectedVCs); // Store full VCs as JSON
     }
 
     // Open VC Panel and fetch VCs
