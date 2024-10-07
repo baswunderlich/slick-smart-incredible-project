@@ -26,7 +26,7 @@ namespace JanusWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> FetchVCs([FromBody] FetchVCsRequest request)
         {
-            var did = request.Did;
+            var did = request.SenderDid;
             try
             {
                 var response = await _httpClient.PostAsync("http://localhost:80/api/vc",
@@ -57,8 +57,8 @@ namespace JanusWeb.Controllers
             // Prepare the MonsiMail model
             SendingMonsiMail monsiModel = new SendingMonsiMail
             {
-                receiverDid = formModel.DID,
-                senderDid = "did:example:university", // Hardcoded sender DID
+                receiverDid = formModel.ReceiverDID,
+                senderDid = formModel.SenderDID,
                 mail = mailContent,          // Using the mail object, not stringified
             };
 
@@ -95,7 +95,7 @@ namespace JanusWeb.Controllers
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("Me Mario", "qwertz0014@web.de"));  // Sender info
             message.To.Add(new MailboxAddress("", formModel.RecipientEmail));        // Recipient info
-            message.Subject = "Monsimail";                                          // Hardcoded subject
+            message.Subject = "monsimail";                                          // Hardcoded subject
 
             // Use the encrypted content as the email text body
             message.Body = new TextPart("plain")

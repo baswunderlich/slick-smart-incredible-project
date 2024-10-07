@@ -72,9 +72,13 @@
                         <input type="text" id="Subject" name="Subject" class="form-control" value="mySubject" required />
                     </div>
 
-                    <div class="col-6">
-                        <label for="DID">DID:</label>
-                        <input type="text" id="DID" name="DID" class="form-control" value="did:example:1" required />
+                    <div class="col-3">
+                        <label for="SenderDID">SenderDID:</label>
+                        <input type="text" id="SenderDID" name="SenderDID" class="form-control" value="did:example:1" required />
+                    </div>
+                    <div class="col-3">
+                        <label for="receiverDID">ReceiverDID:</label>
+                        <input type="text" id="receiverDID" name="receiverDID" class="form-control" value="did:example:university" required />
                     </div>
                 </div>
 
@@ -122,7 +126,7 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ did: did }),
+                body: JSON.stringify({ SenderDID: did }),
             });
 
             if (!response.ok) {
@@ -167,7 +171,7 @@
 
     // Open VC Panel and fetch VCs
     openButton.addEventListener('click', function () {
-        const did = document.getElementById('DID').value;
+        const did = document.getElementById('SenderDID').value;
         console.log('Opening VC Panel with DID:', did); // Log when opening the panel
         fetchVCs(did);
         vcPanel.classList.add('show');
