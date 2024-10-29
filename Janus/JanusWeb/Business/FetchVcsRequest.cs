@@ -2,6 +2,6 @@
 {
     public class FetchVCsRequest
     {
-        public string Did { get; set; }
+        public string SenderDid { get; set; }
     }
 }
