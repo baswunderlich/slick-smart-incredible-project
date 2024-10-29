@@ -1,22 +1,25 @@
 {
-    "@context": [
+  "@context": [
       "https://www.w3.org/ns/credentials/v2",
       "https://www.w3.org/ns/credentials/examples/v2"
-    ],
-    "id": "http://university.example/credentials/3732",
-    "type": ["VerifiableCredential", "StudentConfirmation"],
-    "issuer": "did:example:university",
-    "validFrom": "2010-01-01T19:23:24Z",
-    "validUntil": "2020-01-01T19:23:24Z",
-    "credentialSubject": {
-      "id": "did:example:1",
+  ],
+  "id": "http://university.example/credentials/3732",
+  "type": [
+      "VerifiableCredential",
+      "StudentConfirmation"
+  ],
+  "issuer": "did:example:university",
+  "validFrom": "2022-01-01T19:23:24Z",
+  "validUntil": "2025-01-01T19:23:24Z",
+  "credentialSubject": {
       "authorization": {
-        "type": "StudentConfirmation",
-        "name": "Confirmation"
-      }
-    },
-    "proof": {
+          "name": "Confirmation",
+          "type": "StudentConfirmation"
+      },
+      "id": "did:example:1"
+  },
+  "proof": {
       "type": "DataIntegrityProof",
-      "proofValue": "389bbac300d3fc15ec03bddaa9fd7e2302388acef20d11d50269340a8fe2a49aa819cd13c441b21a30f0e262c266105bc38f3ef5f9e1da7540d42816cb70cb8f2ed24c2ea937ce64caf3972c09c99ac99290b372c8641e2610c286b4cd38ea4ddf909172adcd21d3fa5297330822a11df042d1598d40c415f92dc3f8d0191eda"
-    }
+      "proofValue": "IkRbqfZ1U82/+3HiLHpu0KaBNJsP41h7vuqHf/LjSR9sv9bf2YiD7ZEr1PMy2P2CUWUZzTqEzTMOD8kE9AxeEDUz1xEzfxrBdh7oRFVqQbafu+/vHBaedgxGap1QJMgXTnYR5MRSVJyB0gYB/YsAzHUGPM0qiilWhadWYKmEv5NJIKQew7YTU7CIwiFJdRLEGSaDK8pQYn3/OYYltbLztPRMYIvXl+4any9udgxUKhkgSH90JiZRLHEIGml4wuqQFoBjciPYcuBiuwiY2AfwkfF2E+Kl2Wat4MWBWfMpgiO3qPpJu5F0wcxogTTBx1fQw0kJ7oH60l37EZrHitvKEw=="
   }
+}

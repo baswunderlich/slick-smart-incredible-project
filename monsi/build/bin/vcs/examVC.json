@@ -1,22 +1,25 @@
 {
-    "@context": [
+  "@context": [
       "https://www.w3.org/ns/credentials/v2",
       "https://www.w3.org/ns/credentials/examples/v2"
-    ],
-    "id": "http://university.example/credentials/3732",
-    "type": ["VerifiableCredential", "ExamPariticipationConfirmation"],
-    "issuer": "did:example:university",
-    "validFrom": "2010-01-01T19:23:24Z",
-    "validUntil": "2020-01-01T19:23:24Z",
-    "credentialSubject": {
-      "id": "did:example:1",
-      "authorization": {
-        "type": "ExamPariticipationConfirmation",
-        "name": "Confirmation"
-      }
-    },
-    "proof": {
+  ],
+  "id": "http://university.example/credentials/3732",
+  "type": [
+      "VerifiableCredential",
+      "ExamPariticipationConfirmation"
+  ],
+  "issuer": "did:example:university",
+  "validFrom": "2023-01-01T19:23:24Z",
+  "validUntil": "2026-01-01T19:23:24Z",
+  "credentialSubject": {
+      "exam": {
+          "name": "Bäume und wie sie zu pflanzen sind",
+          "type": "ExamPariticipationConfirmation"
+      },
+      "id": "did:example:1"
+  },
+  "proof": {
       "type": "DataIntegrityProof",
-      "proofValue": "64235d5b6cd4e8e5c7d60939806ffca39f9e363a55b90bfb3004fbaff7044ba741b70a56c0070479a38820db83f1ae6c36f2739db599e88597463b18a612260ac06c27be68e3ea3dccd743c283a35f1daff771e54f843bca0d05ac7abb97b141da7421123007c0d39f59ee05140d0994dcccf49dec2457c612e22a53b95b9058"
-    }
+      "proofValue": "gHbKpLW+Ls8eTGUAR6RZe/O+JA1lhHEW7t30zjVJkK68exwGkyqCSQz6AQEcO1ipdG70Ax4pWHvIE/cEJ3gwomImP2dSOsrRdXQyr8Fo0+J+5BS1YJFMOZCj8OZ/fnoeQZ+wgl0lMSmsC1Mzp1PzC2poDLmYJnxIOBWh/tACvqVG9Wo+yxIbwXQY8+zLLpATh685y0F/iP1r3GG9C+/StmRhDuwLVToY0z7rIEnjZBs7LfLNcUZiAqySqGIl5cql99NZ0vqYHm/G0tzbByMsibBK0hZxnF5812DX0/Mw27c6jnvdevxqUw/fo/r/zp6DfvGeJnrfGL4JnKRm5js2cQ=="
   }
+}
