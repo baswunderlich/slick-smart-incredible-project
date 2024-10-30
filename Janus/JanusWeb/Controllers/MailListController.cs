@@ -123,7 +123,7 @@ namespace JanusWeb.Controllers
         private void ProcessDecryptionResponse(Email email, DecryptResponse decryptResponse)
         {
             CheckVcsForValidityAndSetInMail(email, decryptResponse);
-            email.Content = $"VC check: {email.VCValid}\n\n{decryptResponse.content}\n\n ----original encrypted mail---- \n\n{email.Content}";
+            email.Content = $"{decryptResponse.content}\n\n\n\n\n\n ----VC check----\n\n {email.VCValid}\n\n ----original encrypted mail---- \n\n{email.Content}";
             email.Subject += $": {decryptResponse.subject}";
         }
 
