@@ -164,11 +164,22 @@
         vcs.forEach(vc => {
             const vcElement = document.createElement('div');
             vcElement.className = 'form-check';
+            // Define the possible keys to check
+            const possibleKeys = ["authorization", "exam"];
+            let type = "Not Available";
+
+            // Look for either "authorization" or "exam" key with a "type" field
+            for (const key of possibleKeys) {
+                if (vc.credentialSubject[key]?.type) {
+                    type = vc.credentialSubject[key].type;
+                    break;
+                }
+            }
             // Store the full VC as a JSON string in the data-vc attribute
             vcElement.innerHTML = `
                     <input class="form-check-input" type="checkbox" id="vc${vc.id}" data-vc='${JSON.stringify(vc)}' />
                     <label class="form-check-label" for="vc${vc.id}">
-                        ${vc.credentialSubject.authorization.type}
+                        ${type}
                     </label>
                 `;
             vcContainer.appendChild(vcElement);
