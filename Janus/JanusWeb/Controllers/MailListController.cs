@@ -160,7 +160,7 @@ namespace JanusWeb.Controllers
 
             if (validVCCounter == decryptResponse.reviewedVCs.Count)
             {
-                vcValid = "All VCs are valid!";
+                vcValid = "All VCs are valid!\n\n";
             }
             vcValid += allValidVCs;
             email.VCValid = vcValid;
