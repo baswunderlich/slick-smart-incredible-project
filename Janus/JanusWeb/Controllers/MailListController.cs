@@ -131,6 +131,7 @@ namespace JanusWeb.Controllers
         {
             int validVCCounter = 0;
             string vcValid = "";
+            string allValidVCs = "";
 
             foreach (var vc in decryptResponse.reviewedVCs)
             {
@@ -140,11 +141,18 @@ namespace JanusWeb.Controllers
 
                     if (!isValid)
                     {
+                        string vcNameObject = "";
+                        vcNameObject += GetVcName(vc, "exam");
+                        vcNameObject += GetVcName(vc, "authorization");
                         // Serialize the VC JsonElement back to a string to display it
-                        vcValid += $"The VC is not valid! {vc.GetRawText()}<br/>";
+                        vcValid += $"The VC is not valid! {vcNameObject ?? "no idea how its called"}\n\n";
                     }
                     else
                     {
+                        allValidVCs += "This vc is valid: ";
+                        allValidVCs += GetVcName(vc, "exam");
+                        allValidVCs += GetVcName(vc, "authorization");
+                        allValidVCs += "\n";
                         validVCCounter++;
                     }
                 }
@@ -154,7 +162,24 @@ namespace JanusWeb.Controllers
             {
                 vcValid = "All VCs are valid!";
             }
+            vcValid += allValidVCs;
             email.VCValid = vcValid;
         }
+
+        private static string GetVcName(JsonElement vc, string vcProperty)
+        {
+            if (vc.TryGetProperty("credentialSubject", out JsonElement credential)
+                && credential.ValueKind == JsonValueKind.Object)
+            {
+                // Check if the specified property exists and is not null
+                if (credential.TryGetProperty(vcProperty, out JsonElement VCName)
+                    && VCName.ValueKind != JsonValueKind.Null)
+                {
+                    return VCName.ToString();
+                }
+            }
+            return "";
+        }
+
     }
 }
