@@ -17,6 +17,48 @@
         resize: none;
         overflow-y: auto;
     }
+
+    .tab-btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 1rem 1rem 0 0;
+        position: relative;
+        margin-right: -1rem;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    /* Apply trapezoidal effect with rounded corners */
+    .tab-1 {
+        clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
+    }
+
+    .tab-2 {
+        clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
+    }
+
+    .tab-3 {
+        clip-path: polygon(5% 0%, 95% 0%, 100% 100%, 0% 100%);
+    }
+
+    .tab-btn:hover, .tab-btn:focus {
+        background-color: #0056b3;
+        color: #fff;
+    }
+
+    .tab-btn:after {
+        content: "";
+        position: absolute;
+        bottom: -4px; /* Align with the text area */
+        left: 0;
+        right: 0;
+        height: 4px;
+        background-color: #007bff;
+        z-index: -1;
+    }
+
 </style>
 
 <div class="row row-full-height">
@@ -47,13 +89,13 @@
     <div class="col-10 d-flex flex-column p-0">
         <div class="form-group row">
             <div class="col-auto">
-                <button class="btn btn-primary" onclick="showDecryptedMailContent()">Content</button>
+                <button class="tab-btn btn tab-1" onclick="showDecryptedMailContent()">Content</button>
             </div>
             <div class="col-auto">
-                <button class="btn btn-primary" onclick="showVCs()">VCs</button>
+                <button class="tab-btn btn tab-2" onclick="showVCs()">VCs</button>
             </div>
             <div class="col-auto">
-                <button class="btn btn-primary" onclick="showOriginalMail()">Original Mail</button>
+                <button class="tab-btn btn tab-3" onclick="showOriginalMail()">Original Mail</button>
             </div>
         </div>
         <textarea id="contentArea" class="form-control" readonly></textarea>
