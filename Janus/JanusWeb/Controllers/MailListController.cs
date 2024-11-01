@@ -122,50 +122,46 @@ namespace JanusWeb.Controllers
 
         private void ProcessDecryptionResponse(Email email, DecryptResponse decryptResponse)
         {
-            CheckVcsForValidityAndSetInMail(email, decryptResponse);
+            string vcData = CheckVcsForValidityAndGetData(email, decryptResponse);
             email.OriginalMail = $"{email.Content}";
             email.Content = $"{decryptResponse.content}";
-            email.Vcs = $"----VC check----\n\n {email.VCValid}";
+            email.Vcs = $"----VC check----\n\n {vcData}";
             email.Subject += $"{decryptResponse.subject}";
         }
 
-        private static void CheckVcsForValidityAndSetInMail(Email email, DecryptResponse decryptResponse)
+        private static string CheckVcsForValidityAndGetData(Email email, DecryptResponse decryptResponse)
         {
             int validVCCounter = 0;
-            string vcValid = "";
-            string allValidVCs = "";
+            string vcData = "";  // Contains the relevant data to each vc for the mail
 
             foreach (var vc in decryptResponse.reviewedVCs)
             {
                 if (vc.TryGetProperty("monsiValid", out JsonElement monsiValid))
                 {
                     bool isValid = monsiValid.GetBoolean();
+                    string vcBasicData = GetVcBasicData(vc);  // Contains basic data like issuer, and validity dates
 
+                    string vcNameObject = "";
+                    vcNameObject += GetVcName(vc, "exam");
+                    vcNameObject += GetVcName(vc, "authorization");
                     if (!isValid)
                     {
-                        string vcNameObject = "";
-                        vcNameObject += GetVcName(vc, "exam");
-                        vcNameObject += GetVcName(vc, "authorization");
-                        // Serialize the VC JsonElement back to a string to display it
-                        vcValid += $"The VC is not valid! {vcNameObject ?? "no idea how its called"}\n\n";
+                        vcData += $"The VC is not valid!\n{vcNameObject}\n";
                     }
                     else
                     {
-                        allValidVCs += "This vc is valid: ";
-                        allValidVCs += GetVcName(vc, "exam");
-                        allValidVCs += GetVcName(vc, "authorization");
-                        allValidVCs += "\n\n";
+                        vcData += $"This vc is valid:\n{vcNameObject}\n";
                         validVCCounter++;
                     }
+                    vcData += vcBasicData + "\n\n";
                 }
             }
 
             if (validVCCounter == decryptResponse.reviewedVCs.Count)
             {
-                vcValid = "All VCs are valid!\n\n";
+                vcData = "All VCs are valid!\n\n";
             }
-            vcValid += allValidVCs;
-            email.VCValid = vcValid;
+            return vcData;
         }
 
         private static string GetVcName(JsonElement vc, string vcProperty)
@@ -173,15 +169,28 @@ namespace JanusWeb.Controllers
             if (vc.TryGetProperty("credentialSubject", out JsonElement credential)
                 && credential.ValueKind == JsonValueKind.Object)
             {
-                // Check if the specified property exists and is not null
-                if (credential.TryGetProperty(vcProperty, out JsonElement VCName)
-                    && VCName.ValueKind != JsonValueKind.Null)
-                {
-                    return VCName.ToString();
-                }
+                return GetVcPropertyString(credential, vcProperty) ?? "";
             }
             return "";
         }
 
+        private static string GetVcBasicData(JsonElement vc)
+        {
+            string vcData = "";
+            vcData += $"{GetVcPropertyString(vc, "issuer") ?? "unknown issuer"}\n";
+            vcData += $"{GetVcPropertyString(vc, "validFrom") ?? "No Valid From date"}\n";
+            vcData += $"{GetVcPropertyString(vc, "validUntil") ?? "No Valid Until date"}\n";
+            return vcData;
+        }
+
+        private static string? GetVcPropertyString(JsonElement vc, string property)
+        {
+            if (vc.TryGetProperty(property, out JsonElement VCdata)
+                && VCdata.ValueKind != JsonValueKind.Undefined)
+            {
+                return VCdata.ToString();
+            }
+            return null;
+        }
     }
 }
