@@ -10,6 +10,5 @@
         public string OriginalMail { get; set; }
         public string? Did { get; set; }
         public string? Signature { get; set; }
-        public string VCValid { get; set; }
     }
 }
