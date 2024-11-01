@@ -36,19 +36,58 @@
             @foreach (var email in Model.EmailList)
             {
                 <a href="#" class="list-group-item list-group-item-action"
-                   onclick="showContent('@(JavaScriptEncoder.Default.Encode(email.Content ?? ""))')">
+                   onclick="selectEmail('@(JavaScriptEncoder.Default.Encode(email.Content ?? ""))', 
+                   '@(JavaScriptEncoder.Default.Encode(email.Vcs ?? ""))', 
+                   '@(JavaScriptEncoder.Default.Encode(email.OriginalMail ?? ""))')">
                     @email.Subject
                 </a>
             }
         </div>
     </div>
     <div class="col-10 d-flex flex-column p-0">
+        <div class="form-group row">
+            <div class="col-auto">
+                <button class="btn btn-primary" onclick="showDecryptedMailContent()">Content</button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" onclick="showVCs()">VCs</button>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" onclick="showOriginalMail()">Original Mail</button>
+            </div>
+        </div>
         <textarea id="contentArea" class="form-control" readonly></textarea>
     </div>
 </div>
 
 <script>
+    let currentContent = '';
+    let currentVCs = '';
+    let currentOriginalMail = '';
+
+    function selectEmail(content, vcs, originalMail) {
+        // Set the content, VCs, and OriginalMail of the selected email
+        console.log("this things got passed:" , content, vcs, originalMail)
+        currentContent = content;
+        currentVCs = vcs;
+        currentOriginalMail = originalMail;
+
+        showContent(currentContent);
+    }
+
     function showContent(content) {
         document.getElementById('contentArea').value = content;
+    }
+
+    function showDecryptedMailContent() {
+        showContent(currentContent);
+    }
+
+    function showVCs() {
+        showContent(currentVCs);
+    }
+
+    function showOriginalMail() {
+        showContent(currentOriginalMail);
     }
 </script>

@@ -123,8 +123,10 @@ namespace JanusWeb.Controllers
         private void ProcessDecryptionResponse(Email email, DecryptResponse decryptResponse)
         {
             CheckVcsForValidityAndSetInMail(email, decryptResponse);
-            email.Content = $"{decryptResponse.content}\n\n\n\n\n\n ----VC check----\n\n {email.VCValid}\n\n ----original encrypted mail---- \n\n{email.Content}";
-            email.Subject += $": {decryptResponse.subject}";
+            email.OriginalMail = $"{email.Content}";
+            email.Content = $"{decryptResponse.content}";
+            email.Vcs = $"----VC check----\n\n {email.VCValid}";
+            email.Subject += $"{decryptResponse.subject}";
         }
 
         private static void CheckVcsForValidityAndSetInMail(Email email, DecryptResponse decryptResponse)
@@ -152,7 +154,7 @@ namespace JanusWeb.Controllers
                         allValidVCs += "This vc is valid: ";
                         allValidVCs += GetVcName(vc, "exam");
                         allValidVCs += GetVcName(vc, "authorization");
-                        allValidVCs += "\n";
+                        allValidVCs += "\n\n";
                         validVCCounter++;
                     }
                 }
