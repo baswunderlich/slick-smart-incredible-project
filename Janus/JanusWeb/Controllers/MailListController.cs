@@ -126,7 +126,7 @@ namespace JanusWeb.Controllers
             email.OriginalMail = $"{email.Content}";
             email.Content = $"{decryptResponse.content}";
             email.Vcs = $"----VC check----\n\n{vcData}";
-            email.Subject += $"{decryptResponse.subject}";
+            email.Subject += $": {decryptResponse.subject}";
         }
 
         private static string CheckVcsForValidityAndGetData(Email email, DecryptResponse decryptResponse)
