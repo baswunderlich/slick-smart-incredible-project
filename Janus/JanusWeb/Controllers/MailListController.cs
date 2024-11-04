@@ -156,12 +156,13 @@ namespace JanusWeb.Controllers
                     vcData += vcBasicData + "\n\n";
                 }
             }
-
+            string allvalid = "";
             if (validVCCounter == decryptResponse.reviewedVCs.Count)
             {
-                vcData = "All VCs are valid!\n\n";
+                allvalid = "All VCs are valid!\n\n";
             }
-            return vcData;
+            return $"{allvalid}{vcData}";
+        }
         }
 
         private static string GetVcName(JsonElement vc, string vcProperty)
