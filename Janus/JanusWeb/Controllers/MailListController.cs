@@ -141,16 +141,15 @@ namespace JanusWeb.Controllers
                     bool isValid = monsiValid.GetBoolean();
                     string vcBasicData = GetVcBasicData(vc);  // Contains basic data like issuer, and validity dates
 
-                    string vcNameObject = "";
-                    vcNameObject += GetVcName(vc, "exam");
-                    vcNameObject += GetVcName(vc, "authorization");
+                    JsonElement vcNameElement = GetVcNameJsonElement(vc);
+                    string vcNameObject = GetElementsOfJsonElement(vcNameElement);
                     if (!isValid)
                     {
-                        vcData += $"The VC is not valid!\n{vcNameObject}\n";
+                        vcData += $"This VC is not valid!\n{vcNameObject}";
                     }
                     else
                     {
-                        vcData += $"This vc is valid:\n{vcNameObject}\n";
+                        vcData += $"This vc is valid:\n{vcNameObject}";
                         validVCCounter++;
                     }
                     vcData += vcBasicData + "\n\n";
@@ -163,6 +162,21 @@ namespace JanusWeb.Controllers
             }
             return $"{allvalid}{vcData}";
         }
+
+        private static JsonElement GetVcNameJsonElement(JsonElement vc)
+        {
+            if (vc.TryGetProperty("credentialSubject", out JsonElement credential)
+                && credential.ValueKind == JsonValueKind.Object)
+            {
+                if (credential.TryGetProperty("exam", out JsonElement nameObject)
+                && nameObject.ValueKind == JsonValueKind.Object)
+                    return nameObject;
+
+                if (credential.TryGetProperty("authorization", out JsonElement nameObject2)
+                && nameObject2.ValueKind == JsonValueKind.Object)
+                    return nameObject2;
+            }
+            return new JsonElement();
         }
 
         private static string GetVcName(JsonElement vc, string vcProperty)
@@ -178,9 +192,9 @@ namespace JanusWeb.Controllers
         private static string GetVcBasicData(JsonElement vc)
         {
             string vcData = "";
-            vcData += $"{GetVcPropertyString(vc, "issuer") ?? "unknown issuer"}\n";
-            vcData += $"{GetVcPropertyString(vc, "validFrom") ?? "No Valid From date"}\n";
-            vcData += $"{GetVcPropertyString(vc, "validUntil") ?? "No Valid Until date"}\n";
+            vcData += $"Issuer: {GetVcPropertyString(vc, "issuer") ?? "unknown issuer"}\n";
+            vcData += $"Valid from date: {GetVcPropertyString(vc, "validFrom") ?? "No Valid From date"}\n";
+            vcData += $"valid until date: {GetVcPropertyString(vc, "validUntil") ?? "No Valid Until date"}\n";
             return vcData;
         }
 
@@ -192,6 +206,22 @@ namespace JanusWeb.Controllers
                 return VCdata.ToString();
             }
             return null;
+        }
+
+        private static string GetElementsOfJsonElement(JsonElement jsonElement)
+        {
+            StringBuilder properties = new StringBuilder();
+            if (jsonElement.ValueKind == JsonValueKind.Object)
+            {
+                // Enumerate through the properties of the object
+                foreach (var property in jsonElement.EnumerateObject())
+                {
+                    properties.Append($"{property.Name}: {property.Value}");
+                    properties.AppendLine();
+
+                }
+            }
+            return properties.ToString();
         }
     }
 }
