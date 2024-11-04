@@ -7,6 +7,7 @@ import (
 	"monsi/util"
 	"monsi/wallet"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -17,7 +18,11 @@ func GetVCsAsStrings(did string) []string {
 	str_results := []string{}
 	for _, v := range vcs {
 		fmt.Println(v)
-		str_results = append(str_results, string(v.Type[len(v.Type)-1]))
+		validUntilDate := strings.Split(v.ValidUntil, "-")
+		validUntilYear := validUntilDate[0]
+		validUntilDay := validUntilDate[1]
+		validUntilMonth := validUntilDate[2]
+		str_results = append(str_results, string(v.Type[len(v.Type)-1]+"\t\t  |  "+validUntilMonth[:2]+"."+validUntilDay+"."+validUntilYear))
 	}
 	return str_results
 }
