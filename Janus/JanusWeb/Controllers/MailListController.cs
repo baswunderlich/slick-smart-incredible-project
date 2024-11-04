@@ -125,7 +125,7 @@ namespace JanusWeb.Controllers
             string vcData = CheckVcsForValidityAndGetData(email, decryptResponse);
             email.OriginalMail = $"{email.Content}";
             email.Content = $"{decryptResponse.content}";
-            email.Vcs = $"----VC check----\n\n {vcData}";
+            email.Vcs = $"----VC check----\n\n{vcData}";
             email.Subject += $"{decryptResponse.subject}";
         }
 
@@ -149,7 +149,7 @@ namespace JanusWeb.Controllers
                     }
                     else
                     {
-                        vcData += $"This vc is valid:\n{vcNameObject}";
+                        vcData += $"This VC is valid:\n{vcNameObject}";
                         validVCCounter++;
                     }
                     vcData += vcBasicData + "\n\n";
