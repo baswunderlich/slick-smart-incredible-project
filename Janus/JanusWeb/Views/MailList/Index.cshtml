@@ -18,6 +18,19 @@
         overflow-y: auto;
     }
 
+    .newMailButton{
+        width: 100%;
+        border-radius: 0px;
+    }
+
+    .allignRight {
+        margin-left: 1rem;
+    }
+
+    .biiig{
+        width: 100%;
+    }
+
     .tab-btn {
         background-color: #007bff;
         color: #fff;
@@ -71,7 +84,7 @@
             </div>
         }
         <div>
-            <button class="btn btn-primary" onclick="location.href='@Url.Action("Index", "MailCreator")'">neue mail</button>
+            <button class="btn btn-primary newMailButton" onclick="location.href='@Url.Action("Index", "MailCreator")'">neue mail</button>
         </div>
 
         <div class="list-group" id="emailList">
@@ -87,7 +100,7 @@
         </div>
     </div>
     <div class="col-10 d-flex flex-column p-0">
-        <div class="form-group row">
+        <div class="form-group row allignRight">
             <div class="col-auto">
                 <button class="tab-btn btn tab-1" onclick="showDecryptedMailContent()">Content</button>
             </div>
