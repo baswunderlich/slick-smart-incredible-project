@@ -20,6 +20,17 @@ To build a redistributable, production mode package, use `wails build`.
 https://8gwifi.org/RSAFunctionality?rsasignverifyfunctions=rsasignverifyfunctions&keysize=2048
 
 ## VCs 
-the only valid VC is bachelorDegree.json
+Currently, there are four VCs stored in monsi. 
 
-Currently the VC are signed by the site under "Site for key pair generation". For own key generation to be helpful it would also be necessary to create the signatures with an own script.
+- bachelorDegree.json
+- examVC.json
+- profVC.json
+- studentVC.json
+
+The only valid one is the studentVC.json representing a studenConfirmation
+
+The others have the following problems:
+
+- bachelorDegree.json   (too old)
+- examVC.json           (invalid signature)
+- profVC.json           (too old and invalid signature)
