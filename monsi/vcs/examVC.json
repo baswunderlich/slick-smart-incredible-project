@@ -3,7 +3,7 @@
       "https://www.w3.org/ns/credentials/v2",
       "https://www.w3.org/ns/credentials/examples/v2"
   ],
-  "id": "http://university.example/credentials/3732",
+  "id": "http://university.example/credentials/3735",
   "type": [
       "VerifiableCredential",
       "ExamPariticipationConfirmation"

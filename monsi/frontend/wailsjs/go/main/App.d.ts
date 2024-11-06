@@ -4,8 +4,10 @@ import {util} from '../models';
 
 export function GetListOfDIDs():Promise<Array<util.DID>>;
 
-export function GetListOfVCs(arg1:string):Promise<Array<string>>;
+export function GetListOfVCs(arg1:string):Promise<Array<util.VC>>;
 
 export function RefreshVCs():Promise<void>;
+
+export function RemoveVC(arg1:string):Promise<void>;
 
 export function StoreVC(arg1:string,arg2:string):Promise<void>;
