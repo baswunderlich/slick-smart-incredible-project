@@ -177,11 +177,15 @@
                     break;
                 }
             }
+            let validUntil = ""
+            if (vc.validUntil) {
+                validUntil = vc.validUntil.split("T")[0];
+            }
             // Store the full VC as a JSON string in the data-vc attribute
             vcElement.innerHTML = `
                         <input class="form-check-input" type="checkbox" id="vc${vc.id}" data-vc='${JSON.stringify(vc)}' ${isVCSelected(vc) ? 'checked' : ''} />
                     <label class="form-check-label" for="vc${vc.id}">
-                        ${type}
+                        ${type} ${validUntil}
                     </label>
                 `;
             vcContainer.appendChild(vcElement);
