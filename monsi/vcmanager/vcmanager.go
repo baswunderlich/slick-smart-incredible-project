@@ -69,6 +69,10 @@ func ReadVCsFromFiles() []util.VC {
 	return global_vcs
 }
 
+func RefreshVCs() {
+	ReadVCsFromFiles()
+}
+
 // This function checks whether the VCs signature is correct and the issuer is trusted <TODO>
 func CheckValidityOfVC(vc util.VC) bool {
 	return isVCValid(&vc)
@@ -141,4 +145,23 @@ func SignVC(vc util.ProoflessVC) (*util.VC, error) {
 	json.Unmarshal(vcJson, &signedVC)
 	signedVC.Proof = util.Proof{Type: "DataIntegrityProof", ProofValue: base64.StdEncoding.EncodeToString(signature)}
 	return &signedVC, nil
+}
+
+func StoreVC(vcName string, vcContent string) {
+	file, err := os.Create("./vcs/" + vcName)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	//Check whether the uploaded file is a valid VC
+	var VC util.VC
+	err = json.Unmarshal([]byte(vcContent), &VC)
+
+	if err != nil {
+		fmt.Println("The uploaded file is no valid VC")
+		return
+	}
+
+	file.WriteString(vcContent)
+	file.Close()
 }

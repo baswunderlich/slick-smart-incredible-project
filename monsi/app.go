@@ -30,3 +30,11 @@ func (a *App) GetListOfDIDs() []util.DID {
 func (a *App) GetListOfVCs(did string) []string {
 	return vcmanager.GetVCsAsStrings(did)
 }
+
+func (a *App) RefreshVCs() {
+	vcmanager.RefreshVCs()
+}
+
+func (a *App) StoreVC(vcName string, vcContent string) {
+	vcmanager.StoreVC(vcName, vcContent)
+}
