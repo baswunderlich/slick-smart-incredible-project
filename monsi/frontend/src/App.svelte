@@ -1,5 +1,5 @@
 <script>
-    import { GetListOfDIDs } from "../wailsjs/go/main/App.js";
+    import { GetListOfDIDs, RefreshVCs, StoreVC } from "../wailsjs/go/main/App.js";
     import { GetListOfVCs } from "../wailsjs/go/main/App.js";
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
@@ -20,6 +20,14 @@
                     console.error(err);
                 });
         } catch (err) {
+            console.error(err);
+        }
+    }
+
+    let storeVC = function(vcName, vcContent){
+        try{
+            StoreVC(vcName, vcContent)
+        }catch (err) {
             console.error(err);
         }
     }
@@ -46,13 +54,48 @@
         getListOfDIDs();
     }
 
+    function dropHandler(ev) {
+        console.log("File(s) dropped");
+
+        // Prevent default behavior (Prevent file from being opened)
+        ev.preventDefault();
+
+        if (ev.dataTransfer.items) {
+            // Use DataTransferItemList interface to access the file(s)
+            [...ev.dataTransfer.items].forEach((item, i) => {
+            // If dropped items aren't files, reject them
+            if (item.kind === "file") {
+                const file = item.getAsFile();
+                file.text().then((text) => { storeVC(file.name, text); }).catch((error) => console.log(error))
+            }
+            });
+        } else {
+            // Use DataTransfer interface to access the file(s)
+            [...ev.dataTransfer.files].forEach((file, i) => {
+                file.text().then((text) => { storeVC(file.name, text); }).catch((error) => console.log(error))
+            });
+        }
+    }
+
+    function dragOverHandler(ev) {
+        console.log("File(s) in drop zone");
+
+        // Prevent default behavior (Prevent file from being opened)
+        ev.preventDefault();
+    }
+
+
     init();
 </script>
 
-<main>
-    <h3>Monsi was started...</h3>
+<main 
+id="drop_zone"
+on:drop="{(event) => dropHandler(event)}"
+on:dragover="{(event) => dragOverHandler(event)}">
+    <h3>Monsi was started succesfully</h3>
     <div class="tutorial">    
         On the left you can see the available DIDs. On the right you can see the avaiable VCs matching the selected DID and until they are valid.
+        You can drag and drop new VCs in this window to add them.
     </div>
     <div class="row">
         <div class="column">
@@ -63,10 +106,13 @@
             </div>
         </div>
         <div class="column">  
-            <div class="VClist">
-                {#each VCs as vc}
-                    <div class="vc">{vc}</div> <br/>
-                {/each} 
+            <div class="RightColumn">
+                <div class="VClist">
+                    {#each VCs as vc}
+                        <div class="vc" style="padding-left: 5%;">{vc}</div> <br/>
+                    {/each} 
+                </div>
+                <button class="refreshButton" on:click={() => RefreshVCs()}>Refresh VCs</button>
             </div>
         </div> 
     </div>
@@ -74,16 +120,30 @@
 
 <style>
     .row {
-    display: flex;
-    padding-top: 5%;
+        display: flex;
+        padding-top: 5%;
     }
 
     .column {
-    flex: 50%;
+        flex: 50%;
+    }
+
+    .RightColumn {
+        max-width: 80%;
+        text-align: left;
+        padding-left: 10%;
+        padding-right: 10%;
     }
 
     .VClist {
         text-align: left;
+        border: 1px solid black;
+        border-color: black;
+        max-width: 90%;
+    }
+
+    .DIDlist {
+        max-width: 90%;
     }
 
     .button {
@@ -100,10 +160,31 @@
     text-decoration: none;
     cursor: pointer;
     width: 80%;
-    padding: 5%;
-    border-radius: 1%;
+    max-width: 80%;
+    padding: 2%;
+    max-height: 5%;
+    border-radius: 0.7em;
     }
     .button:hover {opacity: 1}
+
+    .refreshButton {
+    background-color: #1d005f;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    opacity: 0.6;
+    transition: 0.3s;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    width: 90%;
+    height: 2em;
+    max-height: 2em;
+    border-radius: 0.7em;
+    }
+    .refreshButton:hover {opacity: 1}
 
     .vc {
         padding-top: 0.2em;
@@ -111,5 +192,8 @@
 
     .tutorial {
         text-align: left;
+        padding-top: 5%;
+        padding-left: 5%;
+        padding-right: 5%;
     }
 </style>
