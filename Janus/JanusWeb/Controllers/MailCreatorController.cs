@@ -11,10 +11,12 @@ namespace JanusWeb.Controllers
     public class MailCreatorController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly IConfiguration _configuration;
 
-        public MailCreatorController(HttpClient httpClient)
+        public MailCreatorController(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -113,7 +115,7 @@ namespace JanusWeb.Controllers
                 {
                     // Connect to the SMTP server
                     await client.ConnectAsync("smtp.web.de", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync("qwertz0014@web.de", "SSITe5tM@il"); // SMTP credentials
+                    await client.AuthenticateAsync(_configuration["EmailSettings:Email"], _configuration["EmailSettings:Password"]); // SMTP credentials
 
                     // Send the email
                     await client.SendAsync(message);
