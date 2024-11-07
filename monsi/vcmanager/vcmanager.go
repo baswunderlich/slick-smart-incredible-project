@@ -36,7 +36,7 @@ func GetVC(vc_id string) []string {
 }
 
 func GetVCsOfDID(did string) []util.VC {
-	var res []util.VC
+	res := []util.VC{}
 	for _, vc := range global_vcs {
 		if vc.Subject["id"] == did {
 			res = append(res, vc)
@@ -46,7 +46,7 @@ func GetVCsOfDID(did string) []util.VC {
 }
 
 func ReadVCsFromFiles() []util.VC {
-	var vcs []util.VC
+	vcs := []util.VC{}
 	files, err := os.ReadDir("vcs")
 	if err != nil {
 		fmt.Println("The specified directory could not be found: did")
@@ -61,8 +61,9 @@ func ReadVCsFromFiles() []util.VC {
 		err2 := json.Unmarshal(file_content, &decoded_vc)
 		if err2 != nil {
 			fmt.Println(err)
+		} else {
+			vcs = append(vcs, decoded_vc)
 		}
-		vcs = append(vcs, decoded_vc)
 	}
 
 	global_vcs = vcs

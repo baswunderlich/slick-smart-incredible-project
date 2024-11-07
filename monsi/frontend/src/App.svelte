@@ -100,7 +100,7 @@
             RemoveVC(vc)
                 .then(() => {
                     //Refreshing the VC list on changes  
-                    getListOfVCs(currentDID)
+                    getListOfVCs({i: currentDID})
                 })
                 .catch((err) => {
                     console.error(err);
@@ -115,7 +115,7 @@
             RefreshVCs()
                 .then(() => {
                     //Refreshing the VC list on changes  
-                    getListOfVCs(currentDID)
+                    getListOfVCs({i: currentDID})
                 })
                 .catch((err) => {
                     console.error(err);
