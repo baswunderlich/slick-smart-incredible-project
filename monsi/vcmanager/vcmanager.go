@@ -164,4 +164,37 @@ func StoreVC(vcName string, vcContent string) {
 
 	file.WriteString(vcContent)
 	file.Close()
+
+	global_vcs = ReadVCsFromFiles()
+}
+
+func RemoveVC(proofValue string) {
+	files, err := os.ReadDir("vcs")
+	if err != nil {
+		fmt.Println("The specified directory could not be found: did")
+	}
+
+	for _, f := range files {
+		var decoded_vc util.VC
+		file_content, err1 := os.ReadFile(fmt.Sprintf("./vcs/%s", f.Name()))
+		if err1 != nil {
+			fmt.Println(err)
+		}
+		err2 := json.Unmarshal(file_content, &decoded_vc)
+		if err2 != nil {
+			fmt.Println(err)
+		}
+
+		fmt.Println(decoded_vc.Proof.ProofValue)
+		fmt.Println(proofValue)
+		if strings.Compare(decoded_vc.Proof.ProofValue, proofValue) == 0 {
+			err = os.Remove("./vcs/" + f.Name())
+			if err != nil {
+				break
+			}
+			global_vcs = ReadVCsFromFiles()
+			return
+		}
+	}
+	fmt.Println("VC could not be found")
 }

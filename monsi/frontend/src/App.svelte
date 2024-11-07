@@ -1,13 +1,10 @@
 <script>
-    import { GetListOfDIDs, RefreshVCs, StoreVC } from "../wailsjs/go/main/App.js";
+    import { GetListOfDIDs, RefreshVCs, RemoveVC, StoreVC } from "../wailsjs/go/main/App.js";
     import { GetListOfVCs } from "../wailsjs/go/main/App.js";
-	import { setContext } from 'svelte';
-	import { writable } from 'svelte/store';
-	import { getContext } from 'svelte';
 
     let DIDs = [];
-    let VCs = [];               //context: "vcs"
-    let selectedDID = "";       //context: "selectedDID"
+    let VCs = [];
+    var currentDID = 0;
 
     let getListOfDIDs = function() {
         console.log("get list of DIDS");
@@ -27,24 +24,34 @@
     let storeVC = function(vcName, vcContent){
         try{
             StoreVC(vcName, vcContent)
+                .then(() => {
+                    //Refreshing the VC list on changes  
+                    getListOfVCs(currentDID)
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
         }catch (err) {
             console.error(err);
         }
     }
 
     let getListOfVCs = function(i) {
+        //This is a bit ugly and is needed beaucse of svelte 
+        //not allowing to use i.i as parameter
         let index = i.i;
-        console.log(index);
+        if (index == undefined){
+            index = i
+        }
+
+        currentDID = index;
         let did = DIDs[index];
-        console.log("get list of VCs of DID " + did);
+        console.log("get list of VCs of DID " + did.did);
         try{
             GetListOfVCs(did.did)
                 .then((result) => {
                     VCs = result;
                 })
-                .catch((err) => {
-                    console.error(err);
-                });
         } catch (err) {
             console.error(err);
         }
@@ -63,18 +70,22 @@
         if (ev.dataTransfer.items) {
             // Use DataTransferItemList interface to access the file(s)
             [...ev.dataTransfer.items].forEach((item, i) => {
-            // If dropped items aren't files, reject them
-            if (item.kind === "file") {
-                const file = item.getAsFile();
-                file.text().then((text) => { storeVC(file.name, text); }).catch((error) => console.log(error))
-            }
+                // If dropped items aren't files, reject them
+                if (item.kind === "file") {
+                    const file = item.getAsFile();
+                    file.text().then((text) => 
+                    { storeVC(file.name, text) });
+                }
             });
         } else {
             // Use DataTransfer interface to access the file(s)
             [...ev.dataTransfer.files].forEach((file, i) => {
-                file.text().then((text) => { storeVC(file.name, text); }).catch((error) => console.log(error))
-            });
+                file.text().then((text) => 
+                { storeVC(file.name, text) });})
         }
+        
+        //Refreshing the VC list on changes  
+        getListOfVCs(currentDID)
     }
 
     function dragOverHandler(ev) {
@@ -84,6 +95,35 @@
         ev.preventDefault();
     }
 
+    function removeVC(proofValue) {
+        try{
+            RemoveVC(proofValue)
+                .then(() => {
+                    //Refreshing the VC list on changes  
+                    getListOfVCs(currentDID)
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    function refreshVCs(){
+        try{
+            RefreshVCs()
+                .then(() => {
+                    //Refreshing the VC list on changes  
+                    getListOfVCs(currentDID)
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     init();
 </script>
@@ -108,11 +148,17 @@ on:dragover="{(event) => dragOverHandler(event)}">
         <div class="column">  
             <div class="RightColumn">
                 <div class="VClist">
+                    {#key VCs.length}
                     {#each VCs as vc}
-                        <div class="vc" style="padding-left: 5%;">{vc}</div> <br/>
+                        <div class="vc" style="padding-left: 5%;">
+                            {vc.type[vc.type.length-1]}<br/>
+                            Valid until: {vc.validUntil.substring(0,10)}<br/>
+                            <button on:click={() => removeVC(vc.proof.proofValue)}>Remove VC</button>
+                        </div> <br/>
                     {/each} 
+                    {/key}
                 </div>
-                <button class="refreshButton" on:click={() => RefreshVCs()}>Refresh VCs</button>
+                <button class="refreshButton" on:click={() => refreshVCs()}>Refresh VCs</button>
             </div>
         </div> 
     </div>
@@ -147,42 +193,42 @@ on:dragover="{(event) => dragOverHandler(event)}">
     }
 
     .button {
-    background-color: #1d005f;
-    border: none;
-    color: white;
-    padding: 16px 32px;
-    text-align: center;
-    font-size: 16px;
-    margin: 4px 2px;
-    opacity: 0.6;
-    transition: 0.3s;
-    display: inline-block;
-    text-decoration: none;
-    cursor: pointer;
-    width: 80%;
-    max-width: 80%;
-    padding: 2%;
-    max-height: 5%;
-    border-radius: 0.7em;
+        background-color: #1d005f;
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-align: center;
+        font-size: 16px;
+        margin: 4px 2px;
+        opacity: 0.6;
+        transition: 0.3s;
+        display: inline-block;
+        text-decoration: none;
+        cursor: pointer;
+        width: 80%;
+        max-width: 80%;
+        padding: 2%;
+        max-height: 5%;
+        border-radius: 0.7em;
     }
     .button:hover {opacity: 1}
 
     .refreshButton {
-    background-color: #1d005f;
-    border: none;
-    color: white;
-    text-align: center;
-    font-size: 16px;
-    margin: 4px 2px;
-    opacity: 0.6;
-    transition: 0.3s;
-    display: inline-block;
-    text-decoration: none;
-    cursor: pointer;
-    width: 90%;
-    height: 2em;
-    max-height: 2em;
-    border-radius: 0.7em;
+        background-color: #1d005f;
+        border: none;
+        color: white;
+        text-align: center;
+        font-size: 16px;
+        margin: 4px 2px;
+        opacity: 0.6;
+        transition: 0.3s;
+        display: inline-block;
+        text-decoration: none;
+        cursor: pointer;
+        width: 90%;
+        height: 2em;
+        max-height: 2em;
+        border-radius: 0.7em;
     }
     .refreshButton:hover {opacity: 1}
 

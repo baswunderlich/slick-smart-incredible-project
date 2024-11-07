@@ -27,8 +27,8 @@ func (a *App) GetListOfDIDs() []util.DID {
 	return wallet.GetDIDs()
 }
 
-func (a *App) GetListOfVCs(did string) []string {
-	return vcmanager.GetVCsAsStrings(did)
+func (a *App) GetListOfVCs(did string) []util.VC {
+	return vcmanager.GetVCsOfDID(did)
 }
 
 func (a *App) RefreshVCs() {
@@ -37,4 +37,8 @@ func (a *App) RefreshVCs() {
 
 func (a *App) StoreVC(vcName string, vcContent string) {
 	vcmanager.StoreVC(vcName, vcContent)
+}
+
+func (a *App) RemoveVC(proofValue string) {
+	vcmanager.RemoveVC(proofValue)
 }

@@ -14,6 +14,10 @@ export function RefreshVCs() {
   return window['go']['main']['App']['RefreshVCs']();
 }
 
+export function RemoveVC(arg1) {
+  return window['go']['main']['App']['RemoveVC'](arg1);
+}
+
 export function StoreVC(arg1, arg2) {
   return window['go']['main']['App']['StoreVC'](arg1, arg2);
 }
