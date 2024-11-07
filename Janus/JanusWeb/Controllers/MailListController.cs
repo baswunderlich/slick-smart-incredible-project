@@ -11,11 +11,13 @@ namespace JanusWeb.Controllers
     {
         private readonly HttpClient _httpClient;
         private readonly EmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public MailListController(HttpClient httpClient)
+        public MailListController(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _emailService = new EmailService("imap.web.de", 993, true, "qwertz0014@web.de", "SSITe5tM@il");
+            _configuration = configuration;
+            _emailService = new EmailService("imap.web.de", 993, true, _configuration["EmailSettings:Email"], _configuration["EmailSettings:Password"]);
         }
         public async Task<IActionResult> Index()
         {
