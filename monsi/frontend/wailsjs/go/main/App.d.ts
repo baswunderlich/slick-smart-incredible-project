@@ -8,6 +8,6 @@ export function GetListOfVCs(arg1:string):Promise<Array<util.VC>>;
 
 export function RefreshVCs():Promise<void>;
 
-export function RemoveVC(arg1:string):Promise<void>;
+export function RemoveVC(arg1:util.VC):Promise<void>;
 
 export function StoreVC(arg1:string,arg2:string):Promise<void>;

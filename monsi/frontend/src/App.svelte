@@ -95,9 +95,9 @@
         ev.preventDefault();
     }
 
-    function removeVC(proofValue) {
+    function removeVC(vc) {
         try{
-            RemoveVC(proofValue)
+            RemoveVC(vc)
                 .then(() => {
                     //Refreshing the VC list on changes  
                     getListOfVCs(currentDID)
@@ -153,7 +153,7 @@ on:dragover="{(event) => dragOverHandler(event)}">
                         <div class="vc" style="padding-left: 5%;">
                             {vc.type[vc.type.length-1]}<br/>
                             Valid until: {vc.validUntil.substring(0,10)}<br/>
-                            <button on:click={() => removeVC(vc.proof.proofValue)}>Remove VC</button>
+                            <button on:click={() => removeVC(vc)}>Remove VC</button>
                         </div> <br/>
                     {/each} 
                     {/key}

@@ -39,6 +39,6 @@ func (a *App) StoreVC(vcName string, vcContent string) {
 	vcmanager.StoreVC(vcName, vcContent)
 }
 
-func (a *App) RemoveVC(proofValue string) {
-	vcmanager.RemoveVC(proofValue)
+func (a *App) RemoveVC(vc util.VC) {
+	vcmanager.RemoveVC(vc)
 }
