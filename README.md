@@ -1,11 +1,15 @@
-# Project Name: THN SSI Project
+# Overview
+This project can be seen as a proof of concept, trying to show the functionality of SSI in combination with everyday email communication. It contains two programs:
+- Janus: Janus is a mail agent written in C#. Capable of communicating via IMAP/POP with your email provider. With it, you can send and read emails using SSI security.
 
-## Description:
-This project aims to collect interesting information for the planning of an SSI email service
+- Monsi: Monsi is a SSI wallet implementation written in Go using [Wails](https://wails.io/). It includes endpoints for the communication with Janus and manages encryption and decryption of mail contents.
 
-## Interesting links:
-- https://spruceid.dev/docs/credible/
-- https://w3c.github.io/vc-imp-guide/#dfn-verifiable-credentials
+# Setup
+There are binaries for immediate testing for Windows systems here:
+- .\Janus\JanusWeb\bin\Debug\net6.0
+- .\monsi\build\bin
 
-## Testing Email adresse:
-qwertz0014@web.de
+Linux and Mac will have to build there own solutions.
+
+# Future work
+- Encryption via password of DIDs (and especially its passwords) on disk.

@@ -36,7 +36,7 @@ func GetVC(vc_id string) []string {
 }
 
 func GetVCsOfDID(did string) []util.VC {
-	var res []util.VC
+	res := []util.VC{}
 	for _, vc := range global_vcs {
 		if vc.Subject["id"] == did {
 			res = append(res, vc)
@@ -46,7 +46,7 @@ func GetVCsOfDID(did string) []util.VC {
 }
 
 func ReadVCsFromFiles() []util.VC {
-	var vcs []util.VC
+	vcs := []util.VC{}
 	files, err := os.ReadDir("vcs")
 	if err != nil {
 		fmt.Println("The specified directory could not be found: did")
@@ -61,12 +61,17 @@ func ReadVCsFromFiles() []util.VC {
 		err2 := json.Unmarshal(file_content, &decoded_vc)
 		if err2 != nil {
 			fmt.Println(err)
+		} else {
+			vcs = append(vcs, decoded_vc)
 		}
-		vcs = append(vcs, decoded_vc)
 	}
 
 	global_vcs = vcs
 	return global_vcs
+}
+
+func RefreshVCs() {
+	ReadVCsFromFiles()
 }
 
 // This function checks whether the VCs signature is correct and the issuer is trusted <TODO>
@@ -141,4 +146,58 @@ func SignVC(vc util.ProoflessVC) (*util.VC, error) {
 	json.Unmarshal(vcJson, &signedVC)
 	signedVC.Proof = util.Proof{Type: "DataIntegrityProof", ProofValue: base64.StdEncoding.EncodeToString(signature)}
 	return &signedVC, nil
+}
+
+func StoreVC(vcName string, vcContent string) {
+	file, err := os.Create("./vcs/" + vcName)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	//Check whether the uploaded file is a valid VC
+	var VC util.VC
+	err = json.Unmarshal([]byte(vcContent), &VC)
+
+	if err != nil {
+		fmt.Println("The uploaded file is no valid VC")
+		return
+	}
+
+	file.WriteString(vcContent)
+	file.Close()
+
+	global_vcs = ReadVCsFromFiles()
+}
+
+func RemoveVC(vc util.VC) {
+	files, err := os.ReadDir("vcs")
+	if err != nil {
+		fmt.Println("The specified directory could not be found: did")
+	}
+
+	for _, f := range files {
+		var decoded_vc util.VC
+		file_content, err1 := os.ReadFile(fmt.Sprintf("./vcs/%s", f.Name()))
+		if err1 != nil {
+			fmt.Println(err)
+		}
+		err2 := json.Unmarshal(file_content, &decoded_vc)
+		if err2 != nil {
+			fmt.Println(err)
+		}
+
+		fmt.Println(decoded_vc.Proof.ProofValue)
+		if strings.Compare(decoded_vc.Proof.ProofValue, vc.Proof.ProofValue) == 0 &&
+			strings.Compare(decoded_vc.ValidUntil, vc.ValidUntil) == 0 &&
+			strings.Compare(decoded_vc.Issuer, vc.Issuer) == 0 &&
+			strings.Compare(decoded_vc.ID, vc.ID) == 0 {
+			err = os.Remove("./vcs/" + f.Name())
+			if err != nil {
+				break
+			}
+			global_vcs = ReadVCsFromFiles()
+			return
+		}
+	}
+	fmt.Println("VC could not be found")
 }
