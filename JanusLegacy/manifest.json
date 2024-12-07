@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "Web.de Email Reader",
+  "version": "1.0",
+  "description": "Liest E-Mail-Inhalte von Web.de",
+  "permissions": [
+    "activeTab",
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.web.de/*"],
+      "js": ["content-script.js"],
+      "all_frames": true,
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "48": "icon.png"
+  }
+}
