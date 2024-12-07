@@ -13,3 +13,6 @@ Linux and Mac will have to build there own solutions.
 
 # Future work
 - Encryption via password of DIDs (and especially its passwords) on disk.
+
+# Remarks 
+- The logos for Janus and Monsi are AI generated using DALL-E
