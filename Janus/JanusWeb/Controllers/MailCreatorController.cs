@@ -98,7 +98,7 @@ namespace JanusWeb.Controllers
 
             // Create the email message with the encrypted content as the body
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Me Mario", "qwertz0014@web.de"));  // Sender info
+            message.From.Add(new MailboxAddress("Me Mario", _configuration["EmailSettings:Email"]));  // Sender info
             message.To.Add(new MailboxAddress("", formModel.RecipientEmail));        // Recipient info
             message.Subject = "monsimail";                                          // Hardcoded subject
 
@@ -114,7 +114,7 @@ namespace JanusWeb.Controllers
                 try
                 {
                     // Connect to the SMTP server
-                    await client.ConnectAsync("smtp.web.de", 587, MailKit.Security.SecureSocketOptions.StartTls);
+                    await client.ConnectAsync(_configuration["ServerSettings:SMTPServer"], Convert.ToInt32(_configuration["ServerSettings:SMTPPort"]), MailKit.Security.SecureSocketOptions.StartTls);
                     await client.AuthenticateAsync(_configuration["EmailSettings:Email"], _configuration["EmailSettings:Password"]); // SMTP credentials
 
                     // Send the email
