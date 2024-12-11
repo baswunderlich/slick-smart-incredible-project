@@ -135,30 +135,36 @@ namespace JanusWeb.Controllers
         {
             int validVCCounter = 0;
             string vcData = "";  // Contains the relevant data to each vc for the mail
-
-            foreach (var vc in decryptResponse.reviewedVCs)
+            if(decryptResponse.reviewedVCs != null) 
             {
-                if (vc.TryGetProperty("monsiValid", out JsonElement monsiValid))
+                foreach (var vc in decryptResponse.reviewedVCs)
                 {
-                    bool isValid = monsiValid.GetBoolean();
-                    string vcBasicData = GetVcBasicData(vc);  // Contains basic data like issuer, and validity dates
+                    if (vc.TryGetProperty("monsiValid", out JsonElement monsiValid))
+                    {
+                        bool isValid = monsiValid.GetBoolean();
+                        string vcBasicData = GetVcBasicData(vc);  // Contains basic data like issuer, and validity dates
 
-                    JsonElement vcNameElement = GetVcNameJsonElement(vc);
-                    string vcNameObject = GetElementsOfJsonElement(vcNameElement);
-                    if (!isValid)
-                    {
-                        vcData += $"This VC is not valid!\n{vcNameObject}";
+                        JsonElement vcNameElement = GetVcNameJsonElement(vc);
+                        string vcNameObject = GetElementsOfJsonElement(vcNameElement);
+                        if (!isValid)
+                        {
+                            vcData += $"This VC is not valid!\n{vcNameObject}";
+                        }
+                        else
+                        {
+                            vcData += $"This VC is valid:\n{vcNameObject}";
+                            validVCCounter++;
+                        }
+                        vcData += vcBasicData + "\n\n";
                     }
-                    else
-                    {
-                        vcData += $"This VC is valid:\n{vcNameObject}";
-                        validVCCounter++;
-                    }
-                    vcData += vcBasicData + "\n\n";
                 }
             }
+            else
+            {
+                vcData = "No VCs were sent";
+            }
             string allvalid = "";
-            if (validVCCounter == decryptResponse.reviewedVCs.Count)
+            if (validVCCounter == decryptResponse.reviewedVCs?.Count)
             {
                 allvalid = "All VCs are valid!\n\n";
             }

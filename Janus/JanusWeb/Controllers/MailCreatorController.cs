@@ -137,6 +137,14 @@ namespace JanusWeb.Controllers
         private object CreateMailContent(MailFormModel formModel)
         {
             var selectedVCs = formModel.SelectedVCs;
+            try
+            {
+                if (selectedVCs[0] == null)
+                    selectedVCs = null;
+            }
+            catch (Exception)
+            {
+            }
 
             return new
             {
