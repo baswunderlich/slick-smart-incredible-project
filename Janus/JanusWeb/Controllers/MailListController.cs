@@ -17,7 +17,7 @@ namespace JanusWeb.Controllers
         {
             _httpClient = httpClient;
             _configuration = configuration;
-            _emailService = new EmailService("imap.web.de", 993, true, _configuration["EmailSettings:Email"], _configuration["EmailSettings:Password"]);
+            _emailService = new EmailService(_configuration["ServerSettings:IMAPSever"], Convert.ToInt32(_configuration["ServerSettings:IMAPPort"]), true, _configuration["EmailSettings:Email"], _configuration["EmailSettings:Password"]);
         }
         public async Task<IActionResult> Index()
         {
